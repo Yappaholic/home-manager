@@ -10,7 +10,7 @@
       of = "onefetch";
     };
     environmentVariables = {
-      EDITOR = "kak";
+      EDITOR = "hx";
       SKIM_DEFAULT_COMMAND = "fd --type f -E node_modules -E bundle";
     };
     extraConfig = ''

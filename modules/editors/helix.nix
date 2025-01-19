@@ -37,6 +37,7 @@ in {
     enable = true;
     ignores = [
       ".build/"
+      "build"
       "bundle/"
       "node_modules/"
     ];

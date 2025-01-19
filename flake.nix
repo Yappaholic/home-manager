@@ -10,6 +10,8 @@
     };
     zen-browser.url = "github:0xc000022070/zen-browser-flake";
     nixvim.url = "github:nix-community/nixvim";
+    zig.url = "github:mitchellh/zig-overlay";
+    zls.url = "github:zigtools/zls";
     kak-tree-sitter-helix = {
       inputs.nixpkgs.follows = "nixpkgs";
       url = "github:igor-ramazanov/kak-tree-sitter-helix";
@@ -26,6 +28,8 @@
     zen-browser,
     kak-tree-sitter-helix,
     nixvim,
+    zig,
+    zls,
     kak-popup,
     ...
   }: let
@@ -43,10 +47,11 @@
         ./modules/editors/helix.nix
         #./modules/editors/nvf/nvf.nix
         ./modules/editors/nixvim/nixvim.nix
-        {nixpkgs.overlays = [kak-popup.overlays.default];}
+        {nixpkgs.overlays = [kak-popup.overlays.default zig.overlays.default];}
         {
           home.packages = [
             zen-browser.packages."${system}".default
+            zls.packages."${system}".default
           ];
         }
       ];

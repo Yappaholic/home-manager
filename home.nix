@@ -1,7 +1,8 @@
 {
   pkgs,
   kak-tree-sitter-helix,
-  ...}: {
+  ...
+}: {
   home.username = "savvy";
   home.homeDirectory = "/home/savvy";
 
@@ -18,7 +19,6 @@
     tailwindcss-language-server
     nodePackages.vscode-langservers-extracted
     wlogout
-    zig
     bemenu
     btop
     pkgs.nerd-fonts.jetbrains-mono
@@ -51,6 +51,9 @@
     c3c
     c3-lsp
     clang
+    clang-tools
+    zigpkgs.master
+    vesktop
   ];
 
   programs.gh = {
