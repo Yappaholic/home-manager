@@ -18,6 +18,14 @@
     language-servers = ["c3-lsp"];
     scope = "source.c3";
   };
+  onyx = {
+    name = "onyx";
+    file-types = ["onyx"];
+    grammar = "odin";
+    scope = "source.onyx";
+    roots = ["onyx-pkg.kdl"];
+    language-servers = ["onyx-lsp"];
+  };
   nix = {
     name = "nix";
     file-types = ["nix"];
@@ -93,12 +101,17 @@ in {
           "ocaml"
           "vue"
           "zig"
+          "odin"
         ];
       };
-      language = [typescript c3 nix];
+      language = [typescript c3 nix onyx];
       grammar = [c3-grammar];
       language-server.c3-lsp = {
         command = "c3-lsp";
+      };
+      language-server.onyx-lsp = {
+        command = "onyx";
+        args = ["lsp"];
       };
       language-server.nixd = {
         command = "nixd";

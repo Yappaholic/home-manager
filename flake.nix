@@ -12,6 +12,8 @@
     nixvim.url = "github:nix-community/nixvim";
     zig.url = "github:mitchellh/zig-overlay";
     zls.url = "github:zigtools/zls";
+    onyx.url = "github:Yappaholic/onyx-flake";
+    onyx-lsp.url = "github:Yappaholic/onyx-lsp-flake";
     kak-tree-sitter-helix = {
       inputs.nixpkgs.follows = "nixpkgs";
       url = "github:igor-ramazanov/kak-tree-sitter-helix";
@@ -31,6 +33,8 @@
     zig,
     zls,
     kak-popup,
+    onyx,
+    onyx-lsp,
     ...
   }: let
     system = "x86_64-linux";
@@ -52,6 +56,8 @@
           home.packages = [
             zen-browser.packages."${system}".default
             zls.packages."${system}".default
+            onyx.packages."${system}".default
+            onyx-lsp.packages."${system}".default
           ];
         }
       ];

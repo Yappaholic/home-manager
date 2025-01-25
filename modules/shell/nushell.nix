@@ -1,4 +1,4 @@
-{...}: {
+{onyx, ...}: {
   programs.nushell = {
     enable = true;
     shellAliases = {
@@ -14,7 +14,8 @@
       SKIM_DEFAULT_COMMAND = "fd --type f -E node_modules -E bundle";
     };
     extraConfig = ''
-    	$env.PATH ++= ":~/.cargo/bin"
+      $env.PATH ++= ":~/.cargo/bin"
+      $env.ONYX_PATH = (nix-store -r (which onyx | get 0.path))
     '';
   };
 }

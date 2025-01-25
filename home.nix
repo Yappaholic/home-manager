@@ -25,7 +25,6 @@
     fish
     onefetch
     fastfetch
-    rustup
     bat
     nixd
     wpsoffice
@@ -50,10 +49,12 @@
     fd
     c3c
     c3-lsp
+    jdt-language-server
     clang
     clang-tools
     zigpkgs.master
     vesktop
+    maven
   ];
 
   programs.gh = {
@@ -64,6 +65,8 @@
     };
   };
   programs.kak-tree-sitter-helix.enable = true;
+
+  programs.java.enable = true;
 
   nixpkgs.config.allowUnfree = true;
 
