@@ -28,7 +28,7 @@
       system = system;
       specialArgs = {inherit inputs;};
       modules = [
-        ./configuration.nix
+        ./system/configuration.nix
         {nixpkgs.overlays = [zig.overlays.default];}
         home-manager.nixosModules.home-manager
         {

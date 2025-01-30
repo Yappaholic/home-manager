@@ -75,13 +75,17 @@
     zsh-abbr = {
       enable = true;
       abbreviations = {
-        "hms" = "home-manager switch";
-        "hmv" = "hx ~/.config/home-manager";
-        "nixv" = "sudoedit /etc/nixos/configuration.nix";
+        "hms" = "sudo nixos-rebuild switch --flake ~/.config/nixos#default";
+        "hmv" = "hx ~/.config/nixos";
       };
     };
     sessionVariables = {
       EDITOR = "hx";
+      QT_QPA_PLATFORM = "wayland";
+      LIBVA_DRIVER_NAME = "nvidia";
+      __GLX_VENDOR_LIBRARY_NAME = "nvidia";
+      NVD_BACKEND = "direct";
+      ELECTRON_OZONE_PLATFORM_HINT = "auto";
     };
   };
 
