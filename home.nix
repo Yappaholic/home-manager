@@ -1,13 +1,13 @@
 {
   pkgs,
-  kak-tree-sitter-helix,
+  #kak-tree-sitter-helix,
   ...
 }: {
   home.username = "savvy";
   home.homeDirectory = "/home/savvy";
 
   home.stateVersion = "24.05";
-  imports = [kak-tree-sitter-helix];
+  #imports = [kak-tree-sitter-helix];
 
   home.packages = with pkgs; [
     waybar
@@ -22,14 +22,14 @@
     bemenu
     btop
     pkgs.nerd-fonts.jetbrains-mono
-    fish
+    elvish
     onefetch
     fastfetch
     bat
     nixd
     wpsoffice
     viber
-    wl-clipboard-rs
+    wl-clipboard
     wl-clipboard-x11
     wlsunset
     slurp
@@ -41,9 +41,9 @@
     niri
     xwayland-satellite
     tealdeer
-    kakoune-unwrapped
-    kakoune-lsp
-    kak-popup
+    #kakoune-unwrapped
+    #kakoune-lsp
+    #kak-popup
     tmux
     skim
     fd
@@ -60,11 +60,28 @@
   programs.gh = {
     enable = true;
     settings = {
-      editor = "nvim";
+      editor = "hx";
       git_protocol = "ssh";
     };
   };
-  programs.kak-tree-sitter-helix.enable = true;
+  #programs.kak-tree-sitter-helix.enable = true;
+
+  programs.zsh = {
+    enable = true;
+    syntaxHighlighting.enable = true;
+    autosuggestion.enable = true;
+    zsh-abbr = {
+      enable = true;
+      abbreviations = {
+        "hms" = "home-manager switch";
+        "hmv" = "hx ~/.config/home-manager";
+        "nixv" = "sudoedit /etc/nixos/configuration.nix";
+      };
+    };
+    sessionVariables = {
+      EDITOR = "hx";
+    };
+  };
 
   programs.java.enable = true;
 
