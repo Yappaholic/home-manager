@@ -19,24 +19,22 @@
     zig,
     zls,
     nixpkgs,
+    home-manager,
     ...
   } @ inputs: let
     system = "x86_64-linux";
   in {
     nixosConfigurations.default = nixpkgs.lib.nixosSystem {
+      system = system;
       specialArgs = {inherit inputs;};
       modules = [
         ./configuration.nix
-        ./home.nix
-        ./modules/util/other.nix
-        ./modules/editors/helix.nix
         {nixpkgs.overlays = [zig.overlays.default];}
-        inputs.home-manager.nixosModules.default
+        home-manager.nixosModules.home-manager
         {
-          home-packages = [
-            zen-browser.packages."${system}".default
-            zls.packages."${system}".default
-          ];
+          home-manager.useGlobalPkgs = true;
+          home-manager.users.savvy = import ./home.nix;
+          home-manager.extraSpecialArgs = {inherit inputs;};
         }
       ];
     };

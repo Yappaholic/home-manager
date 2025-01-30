@@ -5,9 +5,11 @@
 }: {
   home.username = "savvy";
   home.homeDirectory = "/home/savvy";
-
   home.stateVersion = "24.05";
-  #imports = [kak-tree-sitter-helix];
+  imports = [
+    ./modules/editors/helix.nix
+    ./modules/util/other.nix
+  ];
 
   home.packages = with pkgs; [
     waybar
