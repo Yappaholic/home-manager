@@ -19,6 +19,7 @@
 
   networking.hostName = "nixos"; # Define your hostname.
   nix.settings.experimental-features = ["nix-command" "flakes"];
+  nix.nixPath = ["nixpkgs=${inputs.nixpkgs}"];
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -69,7 +70,7 @@
   users.users.savvy = {
     isNormalUser = true;
     description = "Nixyy";
-    shell = pkgs.zsh;
+    shell = pkgs.murex;
     extraGroups = ["networkmanager" "wheel"];
     packages = with pkgs; [
       ghostty

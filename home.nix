@@ -1,5 +1,6 @@
 {
   pkgs,
+  inputs,
   #kak-tree-sitter-helix,
   ...
 }: {
@@ -9,6 +10,8 @@
   imports = [
     ./modules/editors/helix.nix
     ./modules/util/other.nix
+    ./modules/util/gtk.nix
+    #./modules/shell/zsh.nix
   ];
 
   home.packages = with pkgs; [
@@ -25,6 +28,7 @@
     btop
     pkgs.nerd-fonts.jetbrains-mono
     elvish
+    murex
     onefetch
     fastfetch
     bat
@@ -57,6 +61,11 @@
     zigpkgs.master
     vesktop
     maven
+    rustup
+    xdg-utils
+    xdg-desktop-portal-gtk
+    xdg-desktop-portal-hyprland
+    inputs.zen-browser.packages."${system}".default
   ];
 
   programs.gh = {
@@ -66,52 +75,15 @@
       git_protocol = "ssh";
     };
   };
-  #programs.kak-tree-sitter-helix.enable = true;
 
-  programs.zsh = {
+  programs.starship = {
     enable = true;
-    syntaxHighlighting.enable = true;
-    autosuggestion.enable = true;
-    zsh-abbr = {
-      enable = true;
-      abbreviations = {
-        "hms" = "sudo nixos-rebuild switch --flake ~/.config/nixos#default";
-        "hmv" = "hx ~/.config/nixos";
-      };
-    };
-    sessionVariables = {
-      EDITOR = "hx";
-      QT_QPA_PLATFORM = "wayland";
-      LIBVA_DRIVER_NAME = "nvidia";
-      __GLX_VENDOR_LIBRARY_NAME = "nvidia";
-      NVD_BACKEND = "direct";
-      ELECTRON_OZONE_PLATFORM_HINT = "auto";
-    };
   };
+  #programs.kak-tree-sitter-helix.enable = true;
 
   programs.java.enable = true;
 
   nixpkgs.config.allowUnfree = true;
-
-  gtk = {
-    enable = true;
-    cursorTheme = {
-      name = "Adwaita";
-      package = pkgs.adwaita-icon-theme;
-      size = 12;
-    };
-    theme = {
-      name = "Kanagawa-B";
-      package = pkgs.kanagawa-gtk-theme;
-    };
-  };
-
-  home.pointerCursor = {
-    gtk.enable = true;
-    name = "Adwaita";
-    package = pkgs.adwaita-icon-theme;
-    size = 12;
-  };
 
   home.file = {
   };
