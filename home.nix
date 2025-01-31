@@ -9,6 +9,7 @@
   home.stateVersion = "24.05";
   imports = [
     ./modules/editors/helix.nix
+    ./modules/shell/fish/fish.nix
     ./modules/util/other.nix
     ./modules/util/gtk.nix
     #./modules/shell/zsh.nix
@@ -27,7 +28,6 @@
     bemenu
     btop
     pkgs.nerd-fonts.jetbrains-mono
-    elvish
     murex
     onefetch
     fastfetch
@@ -45,6 +45,7 @@
     dust
     prettierd
     niri
+    river
     xwayland-satellite
     tealdeer
     #kakoune-unwrapped
