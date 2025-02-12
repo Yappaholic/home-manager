@@ -5,6 +5,7 @@
   config,
   pkgs,
   inputs,
+  lib,
   ...
 }: {
   imports = [
@@ -34,17 +35,70 @@
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
-
+  xdg.portal = {
+    enable = true;
+    wlr.enable = lib.mkForce true;
+    extraPortals = with pkgs; [
+      xdg-desktop-portal-hyprland
+      xdg-desktop-portal-gtk
+    ];
+  };
+  programs.xwayland = {
+    enable = true;
+    package = pkgs.xwayland-satellite;
+  };
+  programs.niri = {
+    enable = true;
+  };
+  programs.river = {
+    enable = true;
+  };
+  programs.steam = {
+    enable = true;
+    remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
+    dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
+    localNetworkGameTransfers.openFirewall = true;
+  };
   # Configure keymap in X11
   services.xserver.xkb = {
     layout = "us";
     variant = "";
   };
+
+  services.postgresql = {
+    enable = true;
+    ensureDatabases = ["mydb"];
+    enableTCPIP = true;
+    settings = {
+      ssl = true;
+    };
+    authentication = pkgs.lib.mkOverride 10 ''
+      local all  all     						trust
+      host  all  all  127.0.0.1/32  trust
+      host  all  all  ::1/128 		  trust
+    '';
+  };
+
   services.xserver.videoDrivers = ["nvidia"];
+  services.xserve.windowManager.xmonad = {
+    enable = true;
+    enableContribAndExtras = true;
+    config = builtins.readFile ../modules/wm/xmonad/xmonad.hs;
+  };
   programs.dconf.enable = true;
   hardware.graphics = {
     enable = true;
     extraPackages = with pkgs; [libvdpau-va-gl];
+  };
+
+  services.displayManager.ly = {
+    enable = true;
+  };
+
+  services.ollama = {
+    enable = true;
+    loadModels = ["deepseek-coder"];
+    acceleration = "cuda";
   };
 
   hardware.nvidia = {
@@ -60,17 +114,18 @@
     alsa.enable = true;
     pulse.enable = true;
   };
-  programs.zsh.enable = true;
+  programs.fish = {
+    enable = true;
+  };
   programs.nh = {
     enable = true;
-    clean.enable = true;
-    flake = "/etc/nixos";
+    flake = "/home/savvy/.config/nixos#savvy";
   };
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.savvy = {
     isNormalUser = true;
     description = "Nixyy";
-    shell = pkgs.murex;
+    shell = pkgs.fish;
     extraGroups = ["networkmanager" "wheel"];
     packages = with pkgs; [
       ghostty

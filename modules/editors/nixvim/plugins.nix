@@ -1,11 +1,33 @@
-let
-  lsp = import ./lsp.nix;
+{
+  lib,
+  pkgs,
+  ...
+}: let
+  lsp = import ./lsp.nix {pkgs = pkgs;};
   conform-nvim = import ./conform.nix;
 in {
   lsp-format.enable = true;
   telescope.enable = true;
   oil.enable = true;
-  treesitter.enable = true;
+  nvim-jdtls = {
+    enable = true;
+    cmd = [(lib.getExe pkgs.jdt-language-server)];
+  };
+  treesitter = {
+    enable = true;
+    luaConfig.post = ''
+      local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
+            -- change the following as needed
+            parser_config.blade = {
+              install_info = {
+                url = "https://github.com/EmranMR/tree-sitter-blade",
+                files = {"src/parser.c"},
+                branch = "main",
+              },
+              filetype = "blade",
+            }
+    '';
+  };
   luasnip.enable = true;
   web-devicons.enable = true;
   inherit conform-nvim;
@@ -36,10 +58,26 @@ in {
   dashboard.enable = true;
   dressing = {
     enable = true;
+    settings = {
+      input.enable = false;
+      select.enable = false;
+    };
     autoLoad = true;
   };
   nvim-autopairs.enable = true;
-  harpoon.enable = true;
+  harpoon = {
+    enable = true;
+    keymaps = {
+      addFile = "<leader>a";
+      toggleQuickMenu = "<leader>h";
+      navFile = {
+        "1" = "<M-1>";
+        "2" = "<M-2>";
+        "3" = "<M-3>";
+        "4" = "<M-4>";
+      };
+    };
+  };
   lualine.enable = true;
   nvim-surround.enable = true;
   noice = {

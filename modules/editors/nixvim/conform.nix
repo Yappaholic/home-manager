@@ -17,6 +17,7 @@
       javascript = ["prettierd"];
       markdown = ["prettierd"];
       nix = ["alejandra"];
+      rust = ["rustfmt"];
     };
   };
 }

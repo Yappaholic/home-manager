@@ -1,4 +1,4 @@
-{
+{pkgs, ...}: {
   enable = true;
   inlayHints = true;
   servers = {
@@ -6,11 +6,6 @@
     htmx.enable = true;
     nushell.enable = true;
     ts_ls.enable = true;
-    denols = {
-      enable = true;
-      autostart = true;
-      filetypes = [".ts" ".js" ".tsx" ".jsx" ".cjs" ".mjs" ".mts" ".cts"];
-    };
     marksman.enable = true;
     gopls.enable = true;
     jsonls.enable = true;
@@ -22,5 +17,17 @@
     tailwindcss.enable = true;
     cmake.enable = true;
     clangd.enable = true;
+    intelephense = {
+      enable = true;
+      package = pkgs.intelephense;
+    };
+    volar = {
+      enable = true;
+    };
+    rust-analyzer = {
+      enable = true;
+      installRustc = false;
+      installCargo = false;
+    };
   };
 }
