@@ -123,12 +123,30 @@ in {
   nixpkgs.config.allowUnfree = true;
 
   home.file = {
-    ".config/eww".source = ./dotfiles/eww;
-    ".config/xmonad".source = ./dotfiles/xmonad;
-    ".config/ghostty".source = ./dotfiles/ghostty;
-    ".config/niri".source = ./dotfiles/niri;
-    ".config/kak".source = ./dotfiles/kak;
-    ".config/fish".source = ./dotfiles/fish;
+    ".config/eww" = {
+      recursive = true;
+      source = ./dotfiles/eww;
+    };
+    ".config/xmonad" = {
+      recursive = true;
+      source = ./dotfiles/xmonad;
+    };
+    ".config/ghostty" = {
+      recursive = true;
+      source = ./dotfiles/ghostty;
+    };
+    ".config/niri" = {
+      recursive = true;
+      source = ./dotfiles/niri;
+    };
+    ".config/kak" = {
+      recursive = true;
+      source = ./dotfiles/kak;
+    };
+    ".config/fish" = {
+      recursive = true;
+      source = ./dotfiles/fish;
+    };
   };
 
   home.sessionVariables = {
