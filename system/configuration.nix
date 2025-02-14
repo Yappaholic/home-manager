@@ -59,11 +59,21 @@
     dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
     localNetworkGameTransfers.openFirewall = true;
   };
-  # Configure keymap in X11
-  services.xserver.xkb = {
-    layout = "us";
-    variant = "";
-  };
+  services.xserver = {
+    enable = true;
+    xkb = {
+        layout = "us";
+        variant = "";
+      };
+		videoDrivers = ["nvidia"];
+
+    windowManager.xmonad = {
+        enable = true;
+        enableContribAndExtras = true;
+        enableConfiguredRecompile = true;
+        config = builtins.readFile ../modules/wm/xmonad/xmonad.hs;
+    };
+};
 
   services.postgresql = {
     enable = true;
@@ -79,12 +89,6 @@
     '';
   };
 
-  services.xserver.videoDrivers = ["nvidia"];
-  services.xserve.windowManager.xmonad = {
-    enable = true;
-    enableContribAndExtras = true;
-    config = builtins.readFile ../modules/wm/xmonad/xmonad.hs;
-  };
   programs.dconf.enable = true;
   hardware.graphics = {
     enable = true;

@@ -1,0 +1,87 @@
+source "%val{config}/bundle/kak-bundle/rc/kak-bundle.kak"
+bundle kakoune-surround https://github.com/h-youhei/kakoune-surround %{
+}
+
+bundle auto-pairs https://github.com/alexherbo2/auto-pairs.kak %{
+  enable-auto-pairs
+}
+bundle harpoon https://github.com/raiguard/kak-harpoon %{
+  harpoon-add-bindings
+}
+
+bundle-install-hook kakship %{
+  cargo install --force --path .
+	[ ! -e $kak_config/starship.toml ] && cp starship.toml $kak_config/
+}
+
+bundle kakship https://github.com/eburghar/kakship %{
+	kakship-enable
+}
+bundle smarttab https://github.com/andreyorst/smarttab.kak %{
+    set-option global softtabstop 2
+    hook global WinSetOption filetype=(rust|markdown|kak|typescript|javascript|css|html) smarttab
+    hook global WinSetOption filetype=(haskell) expandtab
+}
+# Popup
+eval %sh{kak-popup init}
+# TreeSitter
+eval %sh{ kak-tree-sitter -dks -vvvv --init $kak_session --client $kak_session  }
+colorscheme kanagawa
+
+hook global BufCreate .*\.templ %{
+	set-option buffer filetype templ
+}
+
+hook global BufCreate .*/?.+\.yuck %{
+  set-option buffer filetype yuck
+}
+
+# LSP
+eval %sh{ kak-lsp --kakoune -s $kak_session }
+hook global WinSetOption filetype=(lua|haskell|rust|html|css|python|go|javascript|typescript|purescript|c|cpp|templ|toml|nim|nix|zig) %{
+    lsp-enable-window
+}
+hook global BufSetOption filetype=(rust|go|html|css|typescript|javascript|zig) %{
+    hook buffer BufWritePre .* lsp-formatting-sync
+}
+hook global BufSetOption filetype=nix %{
+  set-option buffer lsp_servers %{
+    [nixd]
+    root_globs = [ "flake.nix", "shell.nix", ".git", ".hg" ]
+    [nixd.settings.nixd]
+    "formatting.command" = [ "alejandra" ]
+    "options.home-manager.expr" = "(builtins.getFlake \"/home/savvy/.config/nixos\").homeConfigurations.savvy.options"
+    "options.nixos.expr" = "(builtins.getFlake \"/home/savvy/.config/nixos\").nixosConfigurations.savvy.options"
+  }
+}
+
+#Highlighters
+lsp-inlay-diagnostics-enable global
+addhl global/ number-lines -relative
+set global tabstop 2
+set global indentwidth 2
+set global autoreload yes
+
+# Tabbing
+hook global InsertCompletionShow .* %{
+  map window insert <tab> <c-n>
+  map window insert <s-tab> <c-p>
+}
+hook global InsertCompletionHide .* %{
+  unmap window insert <tab> <c-n>
+  unmap window insert <s-tab> <c-p>
+}
+
+# Copy and paste
+map global user y '<a-|>xclip -sel clip<ret>' -docstring "Copy clipboard"
+map global user p '!xclip -o<ret>' -docstring "Paste clipboard"
+
+# Mappings
+map global insert <tab> '<a-;>:try lsp-snippets-select-next-placeholders catch %{ execute-keys -with-hooks <lt>tab> }<ret>' -docstring 'Select next snippet placeholder'
+map global user f ': popup --title open --kak-script %{edit %opt{popup_output}} -- sk <ret>' -docstring "Fuzzy finder"
+map global user d ': lsp-diagnostics<ret>' -docstring 'LSP diagnostics'
+map global user k ': lsp-hover<ret>' -docstring 'LSP info'
+map global user c ': comment-line<ret>' -docstring 'Comment lines'
+# Surround
+map global user s ':surround<ret>' -docstring 'surround'
+map global user r ':change-surround<ret>' -docstring 'change'

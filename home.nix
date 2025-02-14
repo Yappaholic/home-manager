@@ -22,6 +22,7 @@ in {
   ];
 
   home.packages = with pkgs; [
+    ad
     obsidian
     emacs29-pgtk
     emacs-lsp-booster
@@ -48,7 +49,8 @@ in {
     vistafonts
     viber
     wl-clipboard
-    wl-clipboard-x11
+    xclip
+    #wl-clipboard-x11
     wlsunset
     slurp
     grim
@@ -86,6 +88,12 @@ in {
     nix-your-shell
     inputs.zen-browser.packages."${system}".default
     fish-git
+    feh
+    picom-pijulius
+    xmobar
+    xdotool
+    eww
+    wmctrl
   ];
 
   programs.gh = {
@@ -95,7 +103,6 @@ in {
       git_protocol = "ssh";
     };
   };
-
   services.wlsunset = {
     enable = true;
     latitude = 54;
@@ -116,6 +123,12 @@ in {
   nixpkgs.config.allowUnfree = true;
 
   home.file = {
+    ".config/eww" = dotfiles/eww;
+    ".config/xmonad" = dotfiles/xmonad;
+    ".config/ghostty" = dotfiles/ghostty;
+    ".config/niri" = dotfiles/niri;
+    ".config/kak" = dotfiles/kak;
+    ".config/fish" = dotfiles/fish;
   };
 
   home.sessionVariables = {
