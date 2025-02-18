@@ -1,22 +1,23 @@
 {
   pkgs,
   inputs,
-  kak-tree-sitter-helix,
+  #kak-tree-sitter-helix,
   ...
 }: let
   system = "x86_64-linux";
   fish-git = pkgs.callPackage ./modules/shell/fish/fish-package.nix {};
+  ghostty-git = inputs.ghostty.packages.${system}.default;
   zls-git = inputs.zls.packages.${system}.default;
-  umu-launcher = inputs.umu.packages.${system}.default;
+  #umu-launcher = inputs.umu.packages.${system}.default;
 in {
   home.username = "savvy";
   home.homeDirectory = "/home/savvy";
   home.stateVersion = "24.05";
   imports = [
     inputs.nixvim.homeManagerModules.nixvim
-    kak-tree-sitter-helix
+    #kak-tree-sitter-helix
     ./modules/editors/nixvim/nixvim.nix
-    ./modules/editors/helix.nix
+    #./modules/editors/helix.nix
     ./modules/util/other.nix
     ./modules/util/gtk.nix
   ];
@@ -24,65 +25,67 @@ in {
   home.packages = with pkgs; [
     ad
     obsidian
-    emacs29-pgtk
-    emacs-lsp-booster
-    waybar
-    lutris
-    umu-launcher
+    #emacs29-pgtk
+    #emacs-lsp-booster
+    #waybar
+    #lutris
+    #umu-launcher
     zed-editor
     kotatogram-desktop
     pnpm
     nodejs_23
     bun
-    wlogout
-    go
-    bemenu
+    #wlogout
+    #go
+    #bemenu
     btop
     pkgs.nerd-fonts.jetbrains-mono
-    wineWowPackages.waylandFull
-    murex
+    #wineWowPackages.waylandFull
+    #murex
     onefetch
     fastfetch
     bat
-    wpsoffice
-    corefonts
-    vistafonts
-    viber
-    wl-clipboard
+    #wpsoffice
+    #corefonts
+    #vistafonts
+    #viber
+    #wl-clipboard
     xclip
     #wl-clipboard-x11
-    wlsunset
-    slurp
-    grim
-    swww
+    #wlsunset
+    #slurp
+    #grim
+    #swww
     alejandra
     dust
     prettierd
-    xwayland-satellite
+    #xwayland-satellite
     tealdeer
-    jdt-language-server
-    kakoune-unwrapped
-    kakoune-lsp
-    kak-popup
-    tmux
+    #jdt-language-server
+    #kakoune-unwrapped
+    #kakoune-lsp
+    #kak-popup
+    #tmux
     skim
-    fd
-    c3c
-    c3-lsp
-    clang
+    #fd
+    #c3c
+    #c3-lsp
+    #clang
     nixd
-    intelephense
+    #intelephense
     nodePackages.vscode-langservers-extracted
     typescript-language-server
-    gopls
+    biome
+    lua-language-server
+    #gopls
     clang-tools
     tailwindcss-language-server
     zigpkgs.master
     zls-git
-    php
-    php.packages.composer
-    vesktop
-    maven
+    #php
+    #php.packages.composer
+    #vesktop
+    #maven
     rustup
     xdg-utils
     nix-your-shell
@@ -90,10 +93,12 @@ in {
     fish-git
     feh
     picom-pijulius
-    xmobar
+    #xmobar
     xdotool
     eww
     wmctrl
+    ghostty-git
+    redshift
   ];
 
   programs.gh = {
@@ -112,17 +117,19 @@ in {
       night = 3500;
     };
   };
-
+  xsession.windowManager = {
+    awesome.enable = true;
+  };
   programs.starship = {
     enable = true;
   };
-  programs.kak-tree-sitter-helix.enable = true;
+  #programs.kak-tree-sitter-helix.enable = true;
 
-  programs.java.enable = true;
+  #programs.java.enable = true;
 
   nixpkgs.config.allowUnfree = true;
 
-  home.file = {
+  xdg.configFile = {
     ".config/eww" = {
       recursive = true;
       source = ./dotfiles/eww;

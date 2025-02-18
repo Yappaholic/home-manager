@@ -29,6 +29,7 @@
 
   # Enable networking
   networking.networkmanager.enable = true;
+  nix.settings.substituters = [ "https://aseipp-nix-cache.global.ssl.fastly.net" ];
 
   # Set your time zone.
   time.timeZone = "Europe/Minsk";
@@ -43,22 +44,22 @@
       xdg-desktop-portal-gtk
     ];
   };
-  programs.xwayland = {
-    enable = true;
-    package = pkgs.xwayland-satellite;
-  };
-  programs.niri = {
-    enable = true;
-  };
-  programs.river = {
-    enable = true;
-  };
-  programs.steam = {
-    enable = true;
-    remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
-    dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
-    localNetworkGameTransfers.openFirewall = true;
-  };
+  #programs.xwayland = {
+  #  enable = true;
+  #  package = pkgs.xwayland-satellite;
+  #};
+  #programs.niri = {
+  #  enable = true;
+  #};
+  #programs.river = {
+  #  enable = true;
+  #};
+  #programs.steam = {
+  #  enable = true;
+  #  remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
+  #  dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
+  #  localNetworkGameTransfers.openFirewall = true;
+  #};
   services.xserver = {
     enable = true;
     xkb = {
@@ -76,7 +77,7 @@
 };
 
   services.postgresql = {
-    enable = true;
+    enable = false;
     ensureDatabases = ["mydb"];
     enableTCPIP = true;
     settings = {
@@ -99,11 +100,11 @@
     enable = true;
   };
 
-  services.ollama = {
-    enable = true;
-    loadModels = ["deepseek-coder"];
-    acceleration = "cuda";
-  };
+  #services.ollama = {
+  #  enable = true;
+  #  loadModels = ["deepseek-coder"];
+  #  acceleration = "cuda";
+  #};
 
   hardware.nvidia = {
     modesetting.enable = true;
@@ -123,7 +124,7 @@
   };
   programs.nh = {
     enable = true;
-    flake = "/home/savvy/.config/nixos#savvy";
+    flake = "/home/savvy/.config/nixos";
   };
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.savvy = {
@@ -131,9 +132,7 @@
     description = "Nixyy";
     shell = pkgs.fish;
     extraGroups = ["networkmanager" "wheel"];
-    packages = with pkgs; [
-      ghostty
-    ];
+    packages = [];
   };
 
   # Allow unfree packages
@@ -147,7 +146,6 @@
     git
     home-manager
   ];
-  environment.shells = [pkgs.zsh];
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
