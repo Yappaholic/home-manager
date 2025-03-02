@@ -1,4 +1,4 @@
-theme = Kanagawa Wave
+theme = Oxocarbon
 shell-integration = fish
 shell-integration-features = true
 command = fish
@@ -7,7 +7,7 @@ window-decoration = false
 confirm-close-surface = false
 background-opacity = 1
 window-padding-balance = true
-gtk-titlebar = true
+gtk-titlebar = false
 gtk-tabs-location = bottom
 gtk-wide-tabs = true
 bold-is-bright = true

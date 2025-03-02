@@ -53,7 +53,7 @@ beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
 terminal = "ghostty"
-browser = "zen-beta"
+browser = "zen"
 editor = os.getenv("EDITOR") or "zeditor"
 editor_cmd = editor
 
@@ -518,5 +518,6 @@ client.connect_signal("focus", function(c) c.border_color = beautiful.border_foc
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 -- }}}
 awful.spawn.with_shell("feh --bg-center ~/Pictures/wallpaper.jpg")
+awful.spawn.with_shell("pipewire")
 beautiful.useless_gap = 4
 beautiful.gap_single_client = false
