@@ -24,7 +24,7 @@
     volar = {
       enable = true;
     };
-    rust-analyzer = {
+    rust_analyzer = {
       enable = true;
       installRustc = false;
       installCargo = false;

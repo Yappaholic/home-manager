@@ -29,7 +29,7 @@
 
   # Enable networking
   networking.networkmanager.enable = true;
-  nix.settings.substituters = [ "https://aseipp-nix-cache.global.ssl.fastly.net" ];
+  nix.settings.substituters = ["https://aseipp-nix-cache.global.ssl.fastly.net"];
 
   # Set your time zone.
   time.timeZone = "Europe/Minsk";
@@ -60,21 +60,22 @@
   #  dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
   #  localNetworkGameTransfers.openFirewall = true;
   #};
+  console.keyMap = "dvorak";
   services.xserver = {
     enable = true;
     xkb = {
-        layout = "us";
-        variant = "";
-      };
-		videoDrivers = ["nvidia"];
+      layout = "us";
+      variant = "dvorak";
+    };
+    videoDrivers = ["nvidia"];
 
     windowManager.xmonad = {
-        enable = true;
-        enableContribAndExtras = true;
-        enableConfiguredRecompile = true;
-        config = builtins.readFile ../modules/wm/xmonad/xmonad.hs;
+      enable = true;
+      enableContribAndExtras = true;
+      enableConfiguredRecompile = true;
+      config = builtins.readFile ../modules/wm/xmonad/xmonad.hs;
     };
-};
+  };
 
   services.postgresql = {
     enable = false;
@@ -95,6 +96,7 @@
     enable = true;
     extraPackages = with pkgs; [libvdpau-va-gl];
   };
+  programs.hyprland.enable = true;
 
   services.displayManager.ly = {
     enable = true;

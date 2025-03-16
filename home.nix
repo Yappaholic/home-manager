@@ -5,7 +5,7 @@
   ...
 }: let
   system = "x86_64-linux";
-  fish-git = pkgs.callPackage ./modules/shell/fish/fish-package.nix {};
+  #fish-git = pkgs.callPackage ./modules/shell/fish/fish-package.nix {};
   ghostty-git = inputs.ghostty.packages.${system}.default;
   zls-git = inputs.zls.packages.${system}.default;
   #umu-launcher = inputs.umu.packages.${system}.default;
@@ -23,11 +23,13 @@ in {
   ];
 
   home.packages = with pkgs; [
-    ad
+    #ad
     obsidian
     #emacs29-pgtk
+    emacs30-pgtk
     #emacs-lsp-booster
-    #waybar
+    waybar
+    rstudio
     #lutris
     #umu-launcher
     zed-editor
@@ -45,16 +47,17 @@ in {
     onefetch
     fastfetch
     bat
-    #wpsoffice
-    #corefonts
-    #vistafonts
-    #viber
-    #wl-clipboard
-    xclip
-    #wl-clipboard-x11
-    #wlsunset
+    wpsoffice
+    corefonts
+    vistafonts
+    viber
+    wl-clipboard
+    #xclip
+    wl-clipboard-x11
+    wlsunset
     #slurp
     #grim
+    hyprshot
     #swww
     alejandra
     dust
@@ -90,9 +93,11 @@ in {
     xdg-utils
     nix-your-shell
     inputs.zen-browser.packages."${system}".default
-    fish-git
+    #fish-git
     feh
-    picom-pijulius
+    #picom-pijulius
+    fnm
+    wmenu
     #xmobar
     xdotool
     eww
@@ -117,8 +122,27 @@ in {
       night = 3500;
     };
   };
+  services.emacs = {
+    enable = true;
+    package = pkgs.emacs30-pgtk;
+    socketActivation.enable = true;
+  };
+  services.hyprpaper = {
+    enable = true;
+    settings = {
+      ipc = "on";
+      splash = false;
+      preload = ["~/Pictures/wallpaper.png"];
+      wallpaper = ["~/Pictures/wallpaper.png"];
+    };
+  };
   xsession.windowManager = {
     awesome.enable = true;
+  };
+  wayland = {
+    windowManager = {
+      hyprland.enable = false;
+    };
   };
   programs.starship = {
     enable = true;

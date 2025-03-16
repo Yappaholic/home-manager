@@ -66,5 +66,12 @@
         }
       ];
     };
+    # Custom ISO
+    nixosConfigurations.customIso = nixpkgs.lib.nixosSystem {
+      specialArgs = {inherit inputs;};
+      modules = [
+        ./modules/iso/configuration.nix
+      ];
+    };
   };
 }

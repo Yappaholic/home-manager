@@ -25,10 +25,8 @@ in {
       enable = true;
       package = pkgs.wl-clipboard;
     };
-    colorschemes.kanagawa = {
+    colorschemes.oxocarbon = {
       enable = true;
-      settings.theme = "dragon";
-      compile = true;
     };
     inherit opts;
     inherit plugins;
