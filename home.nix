@@ -37,6 +37,8 @@ in {
     pnpm
     nodejs_23
     bun
+    odin
+    ols
     #wlogout
     #go
     #bemenu
@@ -104,6 +106,7 @@ in {
     wmctrl
     ghostty-git
     redshift
+    hyprpaper
   ];
 
   programs.gh = {
@@ -133,7 +136,7 @@ in {
       ipc = "on";
       splash = false;
       preload = ["~/Pictures/wallpaper.png"];
-      wallpaper = ["~/Pictures/wallpaper.png"];
+      wallpaper = ["DVI-I-1,~/Pictures/wallpaper.png"];
     };
   };
   xsession.windowManager = {

@@ -1,7 +1,7 @@
 [
   {
     action = "<cmd>Oil<CR>";
-    key = "<leader>pv";
+    key = "<leader>pl";
   }
   {
     action = "<cmd>lua vim.lsp.buf.hover()<CR>";
@@ -18,5 +18,9 @@
   {
     action = "<cmd>Trouble diagnostics toggle<CR>";
     key = "<leader>d";
+  }
+  {
+    action = "<cmd>noh<CR>";
+    key = "<c-g>";
   }
 ]

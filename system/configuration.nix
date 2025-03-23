@@ -60,12 +60,12 @@
   #  dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
   #  localNetworkGameTransfers.openFirewall = true;
   #};
-  console.keyMap = "dvorak";
+  console.keyMap = "mod-dh-iso-us";
   services.xserver = {
     enable = true;
     xkb = {
       layout = "us";
-      variant = "dvorak";
+      variant = "colemak_dh_wide_iso";
     };
     videoDrivers = ["nvidia"];
 

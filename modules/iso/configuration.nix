@@ -1,16 +1,18 @@
 {
   pkgs,
   modulesPath,
-  nixvim,
+  inputs,
   ...
-}: {
+}: let
+  system = "x86_64-linux";
+  ghostty-git = inputs.ghostty.packages.${system}.default;
+in {
   imports = [
     "${modulesPath}/installer/cd-dvd/installation-cd-minimal.nix"
-    nixvim.nixosModules.nixvim
+    inputs.nixvim.nixosModules.nixvim
     ../editors/nixvim/nixvim.nix
   ];
   nixpkgs.hostPlatform = "x86_64-linux";
-  networking.networkmanager.enable = true;
   environment.systemPackages = with pkgs; [
     firefox
     git

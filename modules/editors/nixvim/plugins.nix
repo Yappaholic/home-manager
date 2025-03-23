@@ -1,18 +1,10 @@
-{
-  lib,
-  pkgs,
-  ...
-}: let
+{pkgs, ...}: let
   lsp = import ./lsp.nix {pkgs = pkgs;};
   conform-nvim = import ./conform.nix;
 in {
   lsp-format.enable = true;
   telescope.enable = true;
   oil.enable = true;
-  nvim-jdtls = {
-    enable = true;
-    cmd = [(lib.getExe pkgs.jdt-language-server)];
-  };
   treesitter = {
     enable = true;
     luaConfig.post = ''
@@ -56,13 +48,14 @@ in {
   cmp-buffer.enable = true;
   inherit lsp;
   dashboard.enable = true;
-  dressing = {
+  snacks = {
     enable = true;
     settings = {
-      input.enable = false;
-      select.enable = false;
+      bigfile.enabled = true;
+      input.enabled = true;
+      notifier.enabled = true;
+      zen.enabled = true;
     };
-    autoLoad = true;
   };
   nvim-autopairs.enable = true;
   harpoon = {
