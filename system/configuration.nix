@@ -60,12 +60,13 @@
   #  dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
   #  localNetworkGameTransfers.openFirewall = true;
   #};
-  console.keyMap = "mod-dh-iso-us";
+  console.useXkbConfig = true;
   services.xserver = {
     enable = true;
     xkb = {
       layout = "us";
       variant = "colemak_dh_wide_iso";
+      options = "grp:toggle,ctrl:nocaps";
     };
     videoDrivers = ["nvidia"];
 
@@ -97,6 +98,15 @@
     extraPackages = with pkgs; [libvdpau-va-gl];
   };
   programs.hyprland.enable = true;
+  programs.sway = {
+    enable = true;
+    wrapperFeatures.gtk = true;
+    extraOptions = ["--unsupported-gpu"];
+    extraPackages = with pkgs; [
+      i3status-rust
+      swayidle
+    ];
+  };
 
   services.displayManager.ly = {
     enable = true;

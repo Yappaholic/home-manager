@@ -6,7 +6,6 @@
     ghostty.url = "github:ghostty-org/ghostty";
     home-manager = {
       url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
     zen-browser.url = "github:0xc000022070/zen-browser-flake";
     #umu.url = "github:Open-Wine-Components/umu-launcher?dir=packaging/nix";

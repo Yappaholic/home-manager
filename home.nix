@@ -8,6 +8,28 @@
   #fish-git = pkgs.callPackage ./modules/shell/fish/fish-package.nix {};
   ghostty-git = inputs.ghostty.packages.${system}.default;
   zls-git = inputs.zls.packages.${system}.default;
+  ols-git =
+    pkgs.ols.overrideAttrs
+    (final: prev: {
+      src = pkgs.fetchFromGitHub {
+        owner = "DanielGavin";
+        repo = "ols";
+        rev = "nightly";
+        sha256 = "sha256-aUQKbZOrxDdUGORY2Rr2Drfxi0Q+dZZQSBCkJ+XQhcE=";
+      };
+      buildInputs = [odin-git];
+    });
+  odin-git =
+    pkgs.odin.overrideAttrs
+    (final: prev: {
+      version = "dev-2025-03";
+      src = pkgs.fetchFromGitHub {
+        owner = "odin-lang";
+        repo = "Odin";
+        rev = "dev-2025-03";
+        sha256 = "sha256-QmbKbhZglucVpsdlyxJsH2bslhqmd0nuMPC+E0dTpiY=";
+      };
+    });
   #umu-launcher = inputs.umu.packages.${system}.default;
 in {
   home.username = "savvy";
@@ -25,6 +47,7 @@ in {
   home.packages = with pkgs; [
     #ad
     obsidian
+    pspp
     #emacs29-pgtk
     emacs30-pgtk
     #emacs-lsp-booster
@@ -37,8 +60,8 @@ in {
     pnpm
     nodejs_23
     bun
-    odin
-    ols
+    odin-git
+    ols-git
     #wlogout
     #go
     #bemenu
@@ -145,6 +168,10 @@ in {
   wayland = {
     windowManager = {
       hyprland.enable = false;
+      sway = {
+        enable = true;
+        config = import ./modules/wm/sway/config.nix;
+      };
     };
   };
   programs.starship = {
