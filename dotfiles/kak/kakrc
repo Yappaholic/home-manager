@@ -1,6 +1,5 @@
 source "%val{config}/bundle/kak-bundle/rc/kak-bundle.kak"
-bundle kakoune-surround https://github.com/h-youhei/kakoune-surround %{
-}
+bundle kakoune-surround https://github.com/h-youhei/kakoune-surround %{}
 
 bundle auto-pairs https://github.com/alexherbo2/auto-pairs.kak %{
   enable-auto-pairs
@@ -17,16 +16,17 @@ bundle-install-hook kakship %{
 bundle kakship https://github.com/eburghar/kakship %{
 	kakship-enable
 }
+
 bundle smarttab https://github.com/andreyorst/smarttab.kak %{
-    set-option global softtabstop 2
     hook global WinSetOption filetype=(rust|markdown|kak|typescript|javascript|css|html) smarttab
     hook global WinSetOption filetype=(haskell) expandtab
 }
 # Popup
-eval %sh{kak-popup init}
+#eval %sh{kak-popup init}
 # TreeSitter
 eval %sh{ kak-tree-sitter -dks -vvvv --init $kak_session --client $kak_session  }
-colorscheme kanagawa
+colorscheme termcolors
+colorscheme carbon
 
 hook global BufCreate .*\.templ %{
 	set-option buffer filetype templ
@@ -36,9 +36,12 @@ hook global BufCreate .*/?.+\.yuck %{
   set-option buffer filetype yuck
 }
 
+hook global BufCreate .*/?.+\.c3 %{
+  set-option buffer filetype c3
+}
 # LSP
 eval %sh{ kak-lsp --kakoune -s $kak_session }
-hook global WinSetOption filetype=(lua|haskell|rust|html|css|python|go|javascript|typescript|purescript|c|cpp|templ|toml|nim|nix|zig) %{
+hook global WinSetOption filetype=(haskell|rust|html|css|go|javascript|typescript|purescript|c|cpp|nix|zig|c3|odin) %{
     lsp-enable-window
 }
 hook global BufSetOption filetype=(rust|go|html|css|typescript|javascript|zig) %{
@@ -55,26 +58,29 @@ hook global BufSetOption filetype=nix %{
   }
 }
 
+hook global BufSetOption filetype=odin %{
+  set-option buffer lsp_servers %{
+    [ols]
+    root_globs = [ "main.odin", "odin.bin"]
+  }
+}
+
+hook global BufSetOption filetype=c3 %{
+  set-option buffer lsp_servers %{
+    [c3lsp]
+    root_globs = [ "project.json" ]
+  }
+}
 #Highlighters
 lsp-inlay-diagnostics-enable global
 addhl global/ number-lines -relative
-set global tabstop 2
-set global indentwidth 2
-set global autoreload yes
-
-# Tabbing
-hook global InsertCompletionShow .* %{
-  map window insert <tab> <c-n>
-  map window insert <s-tab> <c-p>
-}
-hook global InsertCompletionHide .* %{
-  unmap window insert <tab> <c-n>
-  unmap window insert <s-tab> <c-p>
-}
+set-option global tabstop 2
+set-option global indentwidth 2
+set-option global autoreload yes
 
 # Copy and paste
-map global user y '<a-|>xclip -sel clip<ret>' -docstring "Copy clipboard"
-map global user p '!xclip -o<ret>' -docstring "Paste clipboard"
+map global user y '<a-|>wl-copy<ret>' -docstring "Copy clipboard"
+map global user p '!wl-paste<ret>' -docstring "Paste clipboard"
 
 # Mappings
 map global insert <tab> '<a-;>:try lsp-snippets-select-next-placeholders catch %{ execute-keys -with-hooks <lt>tab> }<ret>' -docstring 'Select next snippet placeholder'
