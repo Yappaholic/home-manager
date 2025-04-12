@@ -51,9 +51,9 @@
   #programs.niri = {
   #  enable = true;
   #};
-  #programs.river = {
-  #  enable = true;
-  #};
+programs.river = {
+  enable = true;
+};
   #programs.steam = {
   #  enable = true;
   #  remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
@@ -70,43 +70,43 @@
     };
     videoDrivers = ["nvidia"];
 
-    windowManager.xmonad = {
-      enable = true;
-      enableContribAndExtras = true;
-      enableConfiguredRecompile = true;
-      config = builtins.readFile ../modules/wm/xmonad/xmonad.hs;
-    };
+    # windowManager.xmonad = {
+    #   enable = true;
+    #   enableContribAndExtras = true;
+    #   enableConfiguredRecompile = true;
+    #   config = builtins.readFile ../modules/wm/xmonad/xmonad.hs;
+    # };
   };
 
-  services.postgresql = {
-    enable = false;
-    ensureDatabases = ["mydb"];
-    enableTCPIP = true;
-    settings = {
-      ssl = true;
-    };
-    authentication = pkgs.lib.mkOverride 10 ''
-      local all  all     						trust
-      host  all  all  127.0.0.1/32  trust
-      host  all  all  ::1/128 		  trust
-    '';
-  };
+  # services.postgresql = {
+  #   enable = false;
+  #   ensureDatabases = ["mydb"];
+  #   enableTCPIP = true;
+  #   settings = {
+  #     ssl = true;
+  #   };
+  #   authentication = pkgs.lib.mkOverride 10 ''
+  #     local all  all     						trust
+  #     host  all  all  127.0.0.1/32  trust
+  #     host  all  all  ::1/128 		  trust
+  #   '';
+  # };
 
   programs.dconf.enable = true;
   hardware.graphics = {
     enable = true;
     extraPackages = with pkgs; [libvdpau-va-gl];
   };
-  programs.hyprland.enable = true;
-  programs.sway = {
-    enable = true;
-    wrapperFeatures.gtk = true;
-    extraOptions = ["--unsupported-gpu"];
-    extraPackages = with pkgs; [
-      i3status-rust
-      swayidle
-    ];
-  };
+  # programs.hyprland.enable = true;
+  # programs.sway = {
+  #   enable = true;
+  #   wrapperFeatures.gtk = true;
+  #   extraOptions = ["--unsupported-gpu"];
+  #   extraPackages = with pkgs; [
+  #     i3status-rust
+  #     swayidle
+  #   ];
+  # };
 
   services.displayManager.ly = {
     enable = true;
@@ -131,7 +131,7 @@
     alsa.enable = true;
     pulse.enable = true;
   };
-  programs.fish = {
+  programs.zsh = {
     enable = true;
   };
   programs.nh = {
@@ -142,7 +142,7 @@
   users.users.savvy = {
     isNormalUser = true;
     description = "Nixyy";
-    shell = pkgs.fish;
+    shell = pkgs.zsh;
     extraGroups = ["networkmanager" "wheel"];
     packages = [];
   };
