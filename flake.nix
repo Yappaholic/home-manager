@@ -2,7 +2,7 @@
   description = "Nixos config flake";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs.url = "https://flakehub.com/f/NixOS/nixpkgs/0.1";
     determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/*";
     ghostty.url = "github:ghostty-org/ghostty";
     home-manager = {

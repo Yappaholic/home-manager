@@ -1,10 +1,10 @@
 {
   pkgs,
+  lib,
   inputs,
   ...
 }: let
   system = "x86_64-linux";
-  ghostty-git = inputs.ghostty.packages.${system}.default;
   ols-git =
     pkgs.ols.overrideAttrs
     (final: prev: {
@@ -34,24 +34,29 @@ in {
   imports = [
     ./modules/util/other.nix
     ./modules/util/gtk.nix
+    #./modules/shell/zsh.nix
   ];
 
   home.packages = with pkgs; [
     #ad
     obsidian
-    #emacs29-pgtk
-    emacs30-pgtk
+    emacs-pgtk
     #emacs-lsp-booster
+    wideriver
+    kitty
     waybar
-    kotatogram-desktop
+    i3bar-river
+    i3status-rust
+    telegram-desktop
     nodejs_23
     bun
+    R
+    rPackages.languageserver
     odin-git
     ols-git
     wlogout
     go
     btop
-    pkgs.nerd-fonts.jetbrains-mono
     onefetch
     fastfetch
     bat
@@ -61,7 +66,7 @@ in {
     viber
     wl-clipboard
     wl-clipboard-x11
-    wlsunset
+    gammastep
     hyprshot
     alejandra
     dust
@@ -75,15 +80,21 @@ in {
     typescript-language-server
     biome
     gopls
+    cmake
+    gnumake
+    libvterm
+    clang
     clang-tools
     tailwindcss-language-server
     rustup
+    ripgrep
+    nerd-fonts.jetbrains-mono
     xdg-utils
     nix-your-shell
     inputs.zen-browser.packages."${system}".default
     fnm
     wmenu
-    ghostty-git
+    starship
     hyprpaper
   ];
 
@@ -93,44 +104,28 @@ in {
       git_protocol = "ssh";
     };
   };
-  services.wlsunset = {
-    enable = true;
-    latitude = 54;
-    longitude = 27;
-    temperature = {
-      day = 6500;
-      night = 3500;
-    };
-  };
-  services.emacs = {
-    enable = true;
-    package = pkgs.emacs30-pgtk;
-    socketActivation.enable = true;
-  };
   services.hyprpaper = {
     enable = true;
     settings = {
       ipc = "on";
       splash = false;
-      preload = ["~/Pictures/wallpaper.png"];
-      wallpaper = ["DVI-I-1,~/Pictures/wallpaper.png"];
+      preload = ["~/Pictures/wallpaper.jpg"];
+      wallpaper = ["DVI-I-1,~/Pictures/wallpaper.jpg"];
     };
   };
   # xsession.windowManager = {
   #   awesome.enable = true;
   # };
-  wayland = {
-    windowManager = {
-      hyprland.enable = false;
-      sway = {
-        enable = true;
-        config = import ./modules/wm/sway/config.nix;
+ wayland = {
+  windowManager = {
+     hyprland.enable = false;
+     sway = {
+       enable = true;
+       package = null;
+       config = import ./modules/wm/sway/config.nix {lib = lib;};
       };
     };
   };
-  # programs.starship = {
-  #   enable = true;
-  # };
 
   nixpkgs.config.allowUnfree = true;
 

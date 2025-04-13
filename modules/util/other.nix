@@ -9,10 +9,10 @@
     enableZshIntegration = true;
     #enableNushellIntegration = true;
   };
-  programs.oh-my-posh = {
-    enable = true;
-    #enableNushellIntegration = true;
-    enableZshIntegration = true;
-    useTheme = "pure";
-  };
+  # programs.oh-my-posh = {
+  #   enable = true;
+  #   #enableNushellIntegration = true;
+  #   enableZshIntegration = true;
+  #   useTheme = "pure";
+  # };
 }

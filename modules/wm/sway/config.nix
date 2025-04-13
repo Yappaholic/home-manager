@@ -1,24 +1,23 @@
 {lib}: let
-  menu = "wmenu";
+  menu = "wmenu-run";
   browser = "zen";
   screenshot = "grim -g \"$(slurp)\" | wl-copy";
   mod = "Mod4";
-  terminal = "ghostty";
+  terminal = "kitty";
 in {
   modifier = "Mod4";
-  terminal = "ghostty";
+  defaultWorkspace = "workspace number 1";
   input = {
     "*" = {
-      xkb_variant = "colemak_dh_iso_wide,";
+      xkb_variant = "colemak_dh_wide_iso,";
       xkb_options = "grp:toggle,ctrl:nocaps";
       xkb_layout = "us,ru";
-      repeat_rate = 30;
-      repeat_delay = 200;
+      repeat_rate = "30";
+      repeat_delay = "200";
     };
   };
   output = {
     DVI-I-1 = {
-      bg = "~/Pictures/wallpaper.png";
       resolution = "1920x1080";
       scale = "1.0";
       adaptive_sync = "on";
@@ -29,13 +28,13 @@ in {
   left = "h";
   right = "l";
 
-  keybinds = lib.mkOptionDefault {
+  keybindings = lib.mkOptionDefault {
     #Apps
     "${mod}+q" = "exec ${terminal}";
     "${mod}+p" = "exec ${menu}";
     "${mod}+b" = "exec ${browser}";
     "${mod}+t" = "exec ${screenshot}";
-    "${mod}+e" = "exec emacs";
+    "${mod}+e" = "exec /opt/bin/eclient";
     # System
     "${mod}+c" = "kill";
     "${mod}+Shift+c" = "reload";
@@ -43,21 +42,32 @@ in {
     "${mod}+s" = "scratchpad show";
   };
 
-  bars = {
-    "*" = {
+  bars = [
+    {
       fonts = {
-        names = ["Hasklug Nerd Font Mono"];
+        names = ["JetBrainsMono Nerd Font Mono"];
         size = 11.0;
       };
+      colors = {
+        statusline = "#ffffff";
+        background = "#323232";
+        inactiveWorkspace = {
+          background = "#323232";
+          border = "#323232";
+          text = "#5c5c5c";
+        };
+      };
       mode = "dock";
+      position = "top";
       statusCommand = "i3status-rs";
-    };
-  };
+    }
+  ];
   startup = [
     {command = "gammastep -l 56:27 -t 6500:3000";}
     {
       command = "autotiling-rs";
       always = true;
     }
+    {command = "hyprpaper";}
   ];
 }

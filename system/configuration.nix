@@ -19,6 +19,8 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   networking.hostName = "nixos"; # Define your hostname.
+  networking.enableIPv6 = false;
+  networking.nameservers = ["8.8.8.8" "8.8.8.4"];
   nix.settings.experimental-features = ["nix-command" "flakes"];
   nix.nixPath = ["nixpkgs=${inputs.nixpkgs}"];
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -28,8 +30,9 @@
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   # Enable networking
-  networking.networkmanager.enable = true;
-  nix.settings.substituters = ["https://aseipp-nix-cache.global.ssl.fastly.net"];
+  #networking.networkmanager.enable = true;
+  networking.dhcpcd.enable = true;
+  #nix.settings.substituters = ["https://aseipp-nix-cache.global.ssl.fastly.net"];
 
   # Set your time zone.
   time.timeZone = "Europe/Minsk";
@@ -54,6 +57,8 @@
 programs.river = {
   enable = true;
 };
+
+services.flatpak.enable = true;
   #programs.steam = {
   #  enable = true;
   #  remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
@@ -98,18 +103,24 @@ programs.river = {
     extraPackages = with pkgs; [libvdpau-va-gl];
   };
   # programs.hyprland.enable = true;
-  # programs.sway = {
-  #   enable = true;
-  #   wrapperFeatures.gtk = true;
-  #   extraOptions = ["--unsupported-gpu"];
-  #   extraPackages = with pkgs; [
-  #     i3status-rust
-  #     swayidle
-  #   ];
-  # };
+  programs.sway = {
+    enable = true;
+    wrapperFeatures.gtk = true;
+    extraOptions = ["--unsupported-gpu"];
+    extraPackages = with pkgs; [
+      i3status-rust
+      autotiling-rs
+      swayidle
+    ];
+  };
 
   services.displayManager.ly = {
     enable = true;
+  };
+  services.emacs = {
+    enable = true;
+    install = true;
+    package = pkgs.emacs-pgtk;
   };
 
   #services.ollama = {
@@ -132,7 +143,8 @@ programs.river = {
     pulse.enable = true;
   };
   programs.zsh = {
-    enable = true;
+    enable = false;
+    loginShellInit = ''export PATH=/opt/bin:$PATH'';
   };
   programs.nh = {
     enable = true;
@@ -142,7 +154,7 @@ programs.river = {
   users.users.savvy = {
     isNormalUser = true;
     description = "Nixyy";
-    shell = pkgs.zsh;
+    shell = pkgs.ion;
     extraGroups = ["networkmanager" "wheel"];
     packages = [];
   };
@@ -157,6 +169,7 @@ programs.river = {
     #  wget
     git
     home-manager
+    ion
   ];
 
   # Some programs need SUID wrappers, can be configured further or are

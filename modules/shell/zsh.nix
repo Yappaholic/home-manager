@@ -1,17 +1,17 @@
 {
   programs.zsh = {
     enable = true;
-    syntaxHighlighting.enable = true;
-    autosuggestion.enable = true;
-    zsh-abbr = {
+    antidote = {
       enable = true;
-      abbreviations = {
-        "hms" = "sudo nixos-rebuild switch --flake ~/.config/nixos#default";
-        "hmv" = "hx ~/.config/nixos";
-      };
+      plugins = [
+        "zsh-users/zsh-autosuggestions"
+        "zsh-users/zsh-history-substring-search"
+        "zdharma-continuum/fast-syntax-highlighting kind:defer"
+        "mafredri/zsh-async"
+        "marszall87/lambda-pure"
+      ];
     };
     sessionVariables = {
-      EDITOR = "hx";
       QT_QPA_PLATFORM = "wayland";
       LIBVA_DRIVER_NAME = "nvidia";
       __GLX_VENDOR_LIBRARY_NAME = "nvidia";
