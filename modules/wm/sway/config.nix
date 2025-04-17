@@ -1,6 +1,6 @@
 {lib}: let
   menu = "wmenu-run";
-  browser = "zen";
+  browser = "/opt/bin/nyxt-electron";
   screenshot = "grim -g \"$(slurp)\" | wl-copy";
   mod = "Mod4";
   terminal = "kitty";
@@ -27,7 +27,7 @@ in {
   down = "j";
   left = "h";
   right = "l";
-
+  bindkeysToCode = true;
   keybindings = lib.mkOptionDefault {
     #Apps
     "${mod}+q" = "exec ${terminal}";
@@ -37,11 +37,18 @@ in {
     "${mod}+e" = "exec /opt/bin/eclient";
     # System
     "${mod}+c" = "kill";
+    "${mod}+d" = "layout stacking";
     "${mod}+Shift+c" = "reload";
     "${mod}+Shift+s" = "move scratchpad";
     "${mod}+s" = "scratchpad show";
   };
 
+  gaps = {
+    smartGaps = true;
+    smartBorders = "no_gaps";
+    inner = 4;
+    outer = 4;
+  };
   bars = [
     {
       fonts = {

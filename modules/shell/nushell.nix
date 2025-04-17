@@ -1,4 +1,8 @@
-{onyx, ...}: {
+{inputs, ...}:
+let
+  bash-env-nushell = inputs.bash-env-nushell.packages."x86_64-linux".default;
+in
+{
   programs.nushell = {
     enable = true;
     shellAliases = {
@@ -14,8 +18,17 @@
       SKIM_DEFAULT_COMMAND = "fd --type f -E node_modules -E bundle";
     };
     extraConfig = ''
-      $env.PATH ++= ":~/.cargo/bin"
-      $env.ONYX_PATH = (nix-store -r (which onyx | get 0.path))
+      use ${bash-env-nushell}/bash-env.nu
+      $env.PATH = $env.PATH | append "/opt/bin" | append "~/go/bin" | append "~/.cargo/bin"
+      mkdir ($nu.data-dir | path join "vendor/autoload")
+      starship init nu | save -f ($nu.data-dir | path join "vendor/autoload/starship.nu")
+    '';
+    extraLogin = ''
+      $env.__GLX_VENDOR_LIBRARY_NAME = nvidia
+      $env.LIBVA_DRIVER_NAME = nvidia
+      $env.NVD_BACKEND = direct
+      $env.QT_QPA_PLATFORM = wayland
+      $env.LSP_USE_PLISTS = true
     '';
   };
 }

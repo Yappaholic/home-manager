@@ -7,7 +7,11 @@
   programs.carapace = {
     enable = true;
     enableZshIntegration = true;
-    #enableNushellIntegration = true;
+    enableNushellIntegration = true;
+  };
+  programs.starship = {
+    enable = true;
+    enableNushellIntegration = true;
   };
   # programs.oh-my-posh = {
   #   enable = true;

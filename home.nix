@@ -5,6 +5,7 @@
   ...
 }: let
   system = "x86_64-linux";
+  bash-env-nushell = inputs.bash-env-nushell.packages."${system}".default;
   ols-git =
     pkgs.ols.overrideAttrs
     (final: prev: {
@@ -15,6 +16,35 @@
         sha256 = "sha256-aUQKbZOrxDdUGORY2Rr2Drfxi0Q+dZZQSBCkJ+XQhcE=";
       };
       buildInputs = [odin-git];
+    });
+  nyxt-git =
+    pkgs.nyxt.overrideAttrs
+    (final: prev: {
+      version = "4.0.0-pre-release-5";
+      src = pkgs.fetchFromGitHub {
+        owner = "atlas-engineer";
+        repo = "nyxt";
+        rev = "0bc918c";
+        fetchSubmodules = true;
+        sha256 = "sha256-G3LityR+eEa2o2LOAl+Em4ymzLBw4QnoEGky7jjPTsM";
+      };
+      buildInputs = prev.buildInputs ++ [pkgs.sqlite];
+      LD_LIBRARY_PATH = lib.makeLibraryPath [
+        pkgs.glib
+        pkgs.gobject-introspection
+        pkgs.gdk-pixbuf
+        pkgs.cairo
+        pkgs.pango
+        pkgs.gtk3
+        pkgs.webkitgtk_4_0
+        pkgs.openssl
+        pkgs.libfixposix
+        pkgs.sqlite
+      ];
+      makeFlags = [
+        "all"
+        "NYXT_SUBMODULES=true"
+      ];
     });
   odin-git =
     pkgs.odin.overrideAttrs
@@ -34,14 +64,21 @@ in {
   imports = [
     ./modules/util/other.nix
     ./modules/util/gtk.nix
+    ./modules/editors/helix.nix
+    ./modules/shell/nushell.nix
     #./modules/shell/zsh.nix
   ];
 
   home.packages = with pkgs; [
+    nyxt-git
+    pass-wayland
+    mpv
+    yt-dlp-light
+    bash-env-nushell
     #ad
     obsidian
     emacs-pgtk
-    #emacs-lsp-booster
+    emacs-lsp-booster
     wideriver
     kitty
     waybar
@@ -82,7 +119,6 @@ in {
     gopls
     cmake
     gnumake
-    libvterm
     clang
     clang-tools
     tailwindcss-language-server
@@ -116,13 +152,24 @@ in {
   # xsession.windowManager = {
   #   awesome.enable = true;
   # };
- wayland = {
-  windowManager = {
-     hyprland.enable = false;
-     sway = {
-       enable = true;
-       package = null;
-       config = import ./modules/wm/sway/config.nix {lib = lib;};
+  wayland = {
+    windowManager = {
+      hyprland = {
+        enable = true;
+        settings = import ./modules/wm/hyprland/config.nix;
+        systemd.enable = true;
+      };
+      sway = {
+        enable = true;
+        package = null;
+        config = import ./modules/wm/sway/config.nix {lib = lib;};
+        extraConfig = ''
+          blur enable
+          blur_xray disable
+          blur_passes 3
+          blur_radius 3
+          default_dim_inactive 0.1
+        '';
       };
     };
   };

@@ -103,8 +103,13 @@ services.flatpak.enable = true;
     extraPackages = with pkgs; [libvdpau-va-gl];
   };
   # programs.hyprland.enable = true;
+  services.dbus = {
+    implementation = "broker";
+  };
+  programs.hyprland.enable = true;
   programs.sway = {
     enable = true;
+    package = pkgs.swayfx;
     wrapperFeatures.gtk = true;
     extraOptions = ["--unsupported-gpu"];
     extraPackages = with pkgs; [
@@ -112,6 +117,16 @@ services.flatpak.enable = true;
       autotiling-rs
       swayidle
     ];
+  };
+  programs.uwsm = {
+    enable = true;
+    waylandCompositors = {
+      sway = {
+        prettyName = "Sway-UWSM";
+        comment = "Sway compositor managed by UWSM";
+        binPath = "/run/current-system/sw/bin/sway";
+      };
+    };
   };
 
   services.displayManager.ly = {
@@ -154,7 +169,7 @@ services.flatpak.enable = true;
   users.users.savvy = {
     isNormalUser = true;
     description = "Nixyy";
-    shell = pkgs.ion;
+    shell = pkgs.nushell;
     extraGroups = ["networkmanager" "wheel"];
     packages = [];
   };
@@ -175,10 +190,12 @@ services.flatpak.enable = true;
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
+  services.pcscd.enable = true;
+  programs.gnupg.agent = {
+    enable = true;
+    pinentryPackage = pkgs.pinentry-gtk2;
+    enableSSHSupport = true;
+  };
 
   # List services that you want to enable:
 

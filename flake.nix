@@ -9,6 +9,7 @@
       url = "github:nix-community/home-manager";
     };
     zen-browser.url = "github:0xc000022070/zen-browser-flake";
+    bash-env-nushell.url = "github:tesujimath/bash-env-nushell";
   };
 
   outputs = {
@@ -16,6 +17,7 @@
     nixpkgs,
     home-manager,
     determinate,
+    bash-env-nushell,
     ...
   } @ inputs: let
     system = "x86_64-linux";
