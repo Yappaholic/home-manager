@@ -75,6 +75,10 @@ services.flatpak.enable = true;
     };
     videoDrivers = ["nvidia"];
 
+    windowManager.herbstluftwm = {
+      enable = true;
+      configFile = null;
+    };
     # windowManager.xmonad = {
     #   enable = true;
     #   enableContribAndExtras = true;

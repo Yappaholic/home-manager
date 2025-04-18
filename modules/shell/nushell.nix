@@ -24,11 +24,11 @@ in
       starship init nu | save -f ($nu.data-dir | path join "vendor/autoload/starship.nu")
     '';
     extraLogin = ''
-      $env.__GLX_VENDOR_LIBRARY_NAME = nvidia
-      $env.LIBVA_DRIVER_NAME = nvidia
-      $env.NVD_BACKEND = direct
-      $env.QT_QPA_PLATFORM = wayland
-      $env.LSP_USE_PLISTS = true
+      $env.__GLX_VENDOR_LIBRARY_NAME = "nvidia"
+      $env.LIBVA_DRIVER_NAME = "nvidia"
+      $env.NVD_BACKEND = "direct"
+      $env.QT_QPA_PLATFORM = "wayland"
+      $env.LSP_USE_PLISTS = "true"
     '';
   };
 }

@@ -149,9 +149,9 @@ in {
       wallpaper = ["DVI-I-1,~/Pictures/wallpaper.jpg"];
     };
   };
-  # xsession.windowManager = {
-  #   awesome.enable = true;
-  # };
+  xsession.windowManager = {
+    herbsluftwm = import ./modules/wm/herbsluftwm/config.nix;
+  };
   wayland = {
     windowManager = {
       hyprland = {
