@@ -62,14 +62,21 @@ in {
   home.homeDirectory = "/home/savvy";
   home.stateVersion = "24.05";
   imports = [
+    inputs.nixvim.homeManagerModules.nixvim
     ./modules/util/other.nix
     ./modules/util/gtk.nix
-    ./modules/editors/helix.nix
+    #./modules/editors/helix.nix
+    ./modules/editors/nixvim/nixvim.nix
     ./modules/shell/nushell.nix
     #./modules/shell/zsh.nix
   ];
 
   home.packages = with pkgs; [
+    feh
+    rofi
+    picom-pijulius
+    polybarFull
+    polybar-pulseaudio-control
     nyxt-git
     pass-wayland
     mpv
@@ -121,6 +128,7 @@ in {
     gnumake
     clang
     clang-tools
+    godot-mono
     tailwindcss-language-server
     rustup
     ripgrep
@@ -150,7 +158,7 @@ in {
     };
   };
   xsession.windowManager = {
-    herbsluftwm = import ./modules/wm/herbsluftwm/config.nix;
+    herbstluftwm = import ./modules/wm/herbsluftwm/config.nix {pkgs = pkgs;};
   };
   wayland = {
     windowManager = {

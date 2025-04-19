@@ -6,10 +6,10 @@
     htmx.enable = true;
     nushell.enable = true;
     ts_ls.enable = true;
-    marksman.enable = true;
+    # marksman.enable = true;
     gopls.enable = true;
     jsonls.enable = true;
-    yamlls.enable = true;
+    # yamlls.enable = true;
     nixd = {
       enable = true;
       settings = {
@@ -23,23 +23,24 @@
         };
       };
     };
-    lua_ls.enable = true;
+    # lua_ls.enable = true;
     eslint.enable = true;
     cssls.enable = true;
+    csharp_ls.enable = true;
     tailwindcss.enable = true;
     cmake.enable = true;
     clangd.enable = true;
-    zls = {
-      enable = true;
-      package = null;
-    };
-    intelephense = {
-      enable = true;
-      package = pkgs.intelephense;
-    };
-    volar = {
-      enable = true;
-    };
+    # zls = {
+    #   enable = true;
+    #   package = null;
+    # };
+    # intelephense = {
+    #   enable = true;
+    #   package = pkgs.intelephense;
+    # };
+    # volar = {
+    #   enable = true;
+    # };
     rust_analyzer = {
       enable = true;
       installRustc = false;

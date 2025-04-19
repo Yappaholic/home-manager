@@ -12,7 +12,6 @@
 in {
   programs.nixvim = {
     enable = true;
-    defaultEditor = true;
     globals.mapleader = " ";
     performance = {
       byteCompileLua = {
@@ -25,8 +24,13 @@ in {
       enable = true;
       package = pkgs.wl-clipboard;
     };
-    colorschemes.oxocarbon = {
+    clipboard.providers.xclip = {
       enable = true;
+      package = pkgs.xclip;
+    };
+    colorschemes.rose-pine = {
+      enable = true;
+      settings.variant = "main";
     };
     inherit opts;
     inherit plugins;

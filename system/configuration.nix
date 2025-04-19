@@ -54,11 +54,11 @@
   #programs.niri = {
   #  enable = true;
   #};
-programs.river = {
-  enable = true;
-};
+  programs.river = {
+    enable = true;
+  };
 
-services.flatpak.enable = true;
+  services.flatpak.enable = true;
   #programs.steam = {
   #  enable = true;
   #  remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
@@ -76,7 +76,7 @@ services.flatpak.enable = true;
     videoDrivers = ["nvidia"];
 
     windowManager.herbstluftwm = {
-      enable = true;
+      enable = false;
       configFile = null;
     };
     # windowManager.xmonad = {
