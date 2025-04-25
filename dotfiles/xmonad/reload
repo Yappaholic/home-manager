@@ -1,3 +1,0 @@
-#!/bin/sh
-$HOME/.config/xmonad/build
-xmonad --restart
