@@ -9,7 +9,7 @@ The configuration includes:
 - Grouping windows with tabbing layout, like in i3/herbstluftwm
 - Dynamic scratchpads
 - Xmobar configuration
-- Starting external apps on startup
+- Starting external apps on startup (gamma control, compositor and keyboard config)
 - FullScreen support
 - SmartGaps and SmartBorders support
 - Shell prompt (instead of app launchers like dmenu)
