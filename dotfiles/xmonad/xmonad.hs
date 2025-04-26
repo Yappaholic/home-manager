@@ -6,19 +6,21 @@ import XMonad.Actions.Navigation2D
 import XMonad.Prompt
 import XMonad.Prompt.Shell
 -- Layout
-import XMonad.Layout.Dwindle
 import XMonad.Layout.SubLayouts
 import XMonad.Layout.Spacing
+import XMonad.Layout.BinarySpacePartition
 import XMonad.Layout.BoringWindows
 import XMonad.Layout.WindowNavigation
 import XMonad.Layout.NoBorders
 import XMonad.Layout.Gaps
+import XMonad.Layout.Maximize
 -- Hooks
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.StatusBar
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.StatusBar.PP
+import XMonad.Hooks.ManageHelpers
 -- Util
 import XMonad.Util.NamedScratchpad
 import XMonad.Util.ClickableWorkspaces
@@ -26,7 +28,7 @@ import XMonad.Util.Loggers
 import XMonad.Util.SpawnOnce (spawnOnce)
 import XMonad.Util.EZConfig (additionalKeysP, removeKeysP, checkKeymap)
 
-myLayout = windowNavigation $ subTabbed $ smartSpacingWithEdge 4 (smartBorders (Dwindle R CW 1 1) ||| smartBorders (Tall 1(3/100) (1/2)) ||| noBorders Full)
+myLayout = maximizeWithPadding 0 $ windowNavigation $ subTabbed $ smartSpacingWithEdge 4 (smartBorders(emptyBSP) ||| smartBorders (Tall 1(3/100) (1/2)))
 
 myPP :: PP
 myPP = def
@@ -36,7 +38,7 @@ myPP = def
     , ppHidden          = white . wrap " " ""
     , ppHiddenNoWindows = lowWhite . wrap " " ""
     , ppUrgent          = red . wrap (yellow "!") (yellow "!")
-    , ppOrder           = \[ws, l, _, wins] -> [ws, l, wins]
+    , ppOrder           = \[ws, l, _, wins] -> [ws, wins]
     , ppExtras          = [logTitles formatFocused formatUnfocused]
     }
   where
@@ -60,7 +62,7 @@ mySB = statusBarProp "xmobar ~/.config/xmonad/xmobarrc" (clickablePP myPP)
 
 myStartupHook :: X ()
 myStartupHook = do
-  spawnOnce "gammastep -l 56:27 -b 6500:3000"
+  spawnOnce "gammastep -l 56:27 -t 6500:3000"
   spawnOnce "xset r rate 300 30"
   spawnOnce "setxkbmap -layout 'us,ru' -option 'grp:toggle,ctrl:nocaps' -variant 'colemak_dh_wide_iso,'"
   spawnOnce "feh --bg-fill ~/Pictures/solarized.jpg"
@@ -72,9 +74,9 @@ myWorkspaces = ["1","2","3","4"]
 main :: IO ()
 main = xmonad 
        . withSB mySB
-       . docks
        . ewmhFullscreen
        . ewmh
+       . docks
        . navigation2DP def
                        ("k","h","j","l")
                        [("M-", windowGo)
@@ -85,6 +87,7 @@ main = xmonad
         , layoutHook = avoidStruts $ myLayout
         , startupHook = myStartupHook
         , terminal = "wezterm"
+        , manageHook = composeOne [isFullscreen -?> doFullFloat]
         , focusedBorderColor = "#EBDBB2"
         , normalBorderColor = "#282828"
         }
@@ -93,14 +96,21 @@ main = xmonad
         , ("M-z", spawn "zen")
         , ("M-e", spawn "emacsclient -c")
         , ("M-p", shellPrompt def)
-        , ("M-<Tab>", sendMessage NextLayout)
+        , ("M-S-<Space>", sendMessage NextLayout)
         , ("M-c", kill)
+        , ("M-f", withFocused (sendMessage . maximizeRestore))
+
         , ("M-<Space>", withFocused $ windows . W.sink)
 
-        , ("M-C-h", sendMessage $ pullGroup L)
-        , ("M-C-l", sendMessage $ pullGroup R)
-        , ("M-C-k", sendMessage $ pullGroup U)
-        , ("M-C-j", sendMessage $ pullGroup D)
+        , ("M-<Tab> h", sendMessage $ pullGroup L)
+        , ("M-<Tab> l", sendMessage $ pullGroup R)
+        , ("M-<Tab> k", sendMessage $ pullGroup U)
+        , ("M-<Tab> j", sendMessage $ pullGroup D)
+
+        , ("M-C-h", sendMessage $ ExpandTowards L)
+        , ("M-C-l", sendMessage $ ExpandTowards R)
+        , ("M-C-k", sendMessage $ ExpandTowards U)
+        , ("M-C-j", sendMessage $ ExpandTowards D)
 
         , ("M-m", withFocused (sendMessage . MergeAll))
         , ("M-u", withFocused (sendMessage . UnMerge))
