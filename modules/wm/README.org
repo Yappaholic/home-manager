@@ -1,0 +1,8 @@
+#+title: Window Manager Modules
+
+* Here are the Nix-specific configurations for Window Managers
+To use any of the configs, you need to:
+
+1. Enable option in NixOS `configuration.nix`
+2. Enable option in Home-Manager and in `config` section, import
+   the configuration you need
