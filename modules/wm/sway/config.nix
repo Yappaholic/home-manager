@@ -1,9 +1,8 @@
 {lib}: let
   menu = "wmenu-run";
-  browser = "/opt/bin/nyxt-electron";
-  screenshot = "grim -g \"$(slurp)\" | wl-copy";
+  browser = "zen";
   mod = "Mod4";
-  terminal = "kitty";
+  terminal = "wezterm";
 in {
   modifier = "Mod4";
   defaultWorkspace = "workspace number 1";
@@ -18,6 +17,7 @@ in {
   };
   output = {
     DVI-I-1 = {
+      bg = "~/Pictures/wallpaper.jpg fill";
       resolution = "1920x1080";
       scale = "1.0";
       adaptive_sync = "on";
@@ -30,17 +30,16 @@ in {
   bindkeysToCode = true;
   keybindings = lib.mkOptionDefault {
     #Apps
-    "${mod}+q" = "exec ${terminal}";
+    "${mod}+Return" = "exec ${terminal}";
     "${mod}+p" = "exec ${menu}";
-    "${mod}+b" = "exec ${browser}";
-    "${mod}+t" = "exec ${screenshot}";
-    "${mod}+e" = "exec /opt/bin/eclient";
+    "${mod}+t" = "exec ${browser}";
+    "${mod}+e" = "exec emacsclient -c";
     # System
     "${mod}+c" = "kill";
     "${mod}+d" = "layout stacking";
     "${mod}+Shift+c" = "reload";
-    "${mod}+Shift+s" = "move scratchpad";
-    "${mod}+s" = "scratchpad show";
+    "${mod}+Shift+minus" = "move scratchpad";
+    "${mod}+minus" = "scratchpad show";
   };
 
   gaps = {
@@ -71,10 +70,5 @@ in {
   ];
   startup = [
     {command = "gammastep -l 56:27 -t 6500:3000";}
-    {
-      command = "autotiling-rs";
-      always = true;
-    }
-    {command = "hyprpaper";}
   ];
 }

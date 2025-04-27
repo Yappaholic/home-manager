@@ -1,10 +1,14 @@
 {pkgs}: {
   enable = true;
   mouse = true;
-  terminal = "screen-256color";
+  baseIndex = 1;
   prefix = "C-s";
   newSession = true;
   sensibleOnTop = true;
+  escapeTime = 0;
+  extraConfig = ''
+    set-option -sa terminal-overrides ",xterm*:Tc"
+  '';
   plugins = with pkgs; [
     tmuxPlugins.vim-tmux-navigator
     tmuxPlugins.tmux-which-key

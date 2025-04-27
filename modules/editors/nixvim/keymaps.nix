@@ -7,6 +7,10 @@
     action = "<cmd>Neogit<CR>";
     key = "<leader>gg";
   }
+  {
+    action = "<cmd>term<CR>";
+    key = "<leader>oT";
+  }
 
   # LSP related
   {

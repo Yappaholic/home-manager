@@ -5,6 +5,28 @@ in {
   inherit lsp;
   lsp-format.enable = true;
   telescope.enable = true;
+  tmux-navigator = {
+    enable = true;
+    settings.no_mappings = 0;
+    keymaps = [
+      {
+        action = "left";
+        key = "<M-h>";
+      }
+      {
+        action = "right";
+        key = "<M-l>";
+      }
+      {
+        action = "up";
+        key = "<M-k>";
+      }
+      {
+        action = "down";
+        key = "<M-j>";
+      }
+    ];
+  };
   oil = {
     enable = true;
     settings = {

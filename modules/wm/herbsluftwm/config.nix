@@ -1,46 +1,42 @@
 {pkgs, ...}: let
-  terminal = "kitty";
-  browser = "nyxt";
+  terminal = "ghostty";
+  browser = "vieb";
   eclient = "emacsclient -c";
+  nvim = "${terminal} -e nvim";
 in {
   enable = true;
   extraConfig = ''
-      tag_names=( {1..9} )
-      tag_keys=( {1..9} 0 )
+    tag_names=( {1..9} )
+    tag_keys=( {1..9} 0 )
 
-      herbstclient rename default "''${tag_names[0]}" || true
+    herbstclient rename default "''${tag_names[0]}" || true
 
-      for i in ''${!tag_names[@]} ; do
-        herbstclient add "''${tag_names[$i]}"
-        key="''${tag_keys[$i]}"
-        if ! [ -z "$key" ] ; then
-          herbstclient keybind "Mod4-$key" use_index "$i"
-          herbstclient keybind "Mod4-Shift-$key" move_index "$i"
-        fi
-      done
+    for i in ''${!tag_names[@]} ; do
+     herbstclient add "''${tag_names[$i]}"
+     key="''${tag_keys[$i]}"
+     if ! [ -z "$key" ] ; then
+       herbstclient keybind "Mod4-$key" use_index "$i"
+       herbstclient keybind "Mod4-Shift-$key" move_index "$i"
+     fi
+    done
 
-      herbstclient keybind Mod4-space \
-            or , and . compare tags.focus.curframe_wcount = 2                   \
-                     . cycle_layout +1 vertical horizontal max vertical grid    \
-               , cycle_layout +1
+    herbstclient keybind Mod4-space \
+         or , and . compare tags.focus.curframe_wcount = 2                   \
+                  . cycle_layout +1 vertical horizontal max vertical grid    \
+            , cycle_layout +1
 
-     if herbstclient silent new_attr bool my_not_first_autostart ; then
-        xset r rate 300 30
-        setxkbmap us,ru -variant "colemak_dh_wide_iso," -option "grp:toggle,ctrl:nocaps"
-        feh --bg-fill ~/Pictures/wallpaper.jpg
-        polybar &
-        gammastep -l 56:27 -t 6500:3000 &
-        picom &
-    fi
+    herbstclient spawn $HOME/.config/herbstluftwm/apps_start
   '';
   package = pkgs.herbstluftwm.overrideAttrs (_: o: {disabledTests = o.disabledTests ++ ["test_new_attr_is_writable"];});
   keybinds = {
     Mod4-Shift-q = "quit";
     Mod4-Shift-c = "reload";
-    Mod4-c = "close_or_remove";
+    Mod4-c = "close";
+    Mod4-r = "remove";
     Mod4-q = "spawn ${terminal}";
     Mod4-b = "spawn ${browser}";
     Mod4-e = "spawn ${eclient}";
+    Mod4-n = "spawn ${nvim}";
     Mod4-p = "spawn rofi -show drun";
     Mod4-u = "split bottom 0.5";
     Mod4-o = "split right 0.5";
@@ -84,6 +80,6 @@ in {
     window_gap = 5;
     smart_frame_surroundings = "hide_all";
     smart_window_surroundings = "on";
-    default_frame_layout = "grid";
+    default_frame_layout = "horizontal";
   };
 }

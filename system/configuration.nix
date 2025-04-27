@@ -7,7 +7,33 @@
   inputs,
   lib,
   ...
-}: {
+}: let
+  system = "x86_64-linux";
+  #bash-env-nushell = inputs.bash-env-nushell.packages."${system}".default;
+  wezterm-git = inputs.wezterm.packages."${system}".default;
+  ols-git =
+    pkgs.ols.overrideAttrs
+    (final: prev: {
+      src = pkgs.fetchFromGitHub {
+        owner = "DanielGavin";
+        repo = "ols";
+        rev = "nightly";
+        sha256 = "sha256-aUQKbZOrxDdUGORY2Rr2Drfxi0Q+dZZQSBCkJ+XQhcE=";
+      };
+      buildInputs = [odin-git];
+    });
+  odin-git =
+    pkgs.odin.overrideAttrs
+    (final: prev: {
+      version = "dev-2025-03";
+      src = pkgs.fetchFromGitHub {
+        owner = "odin-lang";
+        repo = "Odin";
+        rev = "dev-2025-03";
+        sha256 = "sha256-QmbKbhZglucVpsdlyxJsH2bslhqmd0nuMPC+E0dTpiY=";
+      };
+    });
+in {
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
@@ -21,7 +47,6 @@
   networking.hostName = "nixos"; # Define your hostname.
   networking.enableIPv6 = false;
   networking.nameservers = ["8.8.8.8" "8.8.8.4"];
-  nix.settings.experimental-features = ["nix-command" "flakes"];
   nix.nixPath = ["nixpkgs=${inputs.nixpkgs}"];
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
@@ -33,6 +58,14 @@
   #networking.networkmanager.enable = true;
   networking.dhcpcd.enable = true;
   #nix.settings.substituters = ["https://aseipp-nix-cache.global.ssl.fastly.net"];
+  # Wezterm specific
+  nix.settings = {
+    experimental-features = ["nix-command" "flakes"];
+
+    substituters = lib.mkBefore ["https://wezterm.cachix.org"];
+    trusted-public-keys = lib.mkBefore ["wezterm.cachix.org-1:kAbhjYUC9qvblTE+s7S+kl5XM1zVa4skO+E/1IDWdH0="];
+    trusted-users = ["@wheel" "root"];
+  };
 
   # Set your time zone.
   time.timeZone = "Europe/Minsk";
@@ -41,6 +74,7 @@
   i18n.defaultLocale = "en_US.UTF-8";
   xdg.portal = {
     enable = true;
+    config.common.default = "*";
     wlr.enable = lib.mkForce true;
     extraPortals = with pkgs; [
       xdg-desktop-portal-hyprland
@@ -55,7 +89,7 @@
   #  enable = true;
   #};
   programs.river = {
-    enable = true;
+    enable = false;
   };
 
   services.flatpak.enable = true;
@@ -68,8 +102,16 @@
   console.useXkbConfig = true;
   services.xserver = {
     enable = true;
+    exportConfiguration = false;
+    displayManager.session = [
+      {
+        manage = "window";
+        name = "herbstluftwm";
+        start = ''exec dbus-run-session herbstluftwm'';
+      }
+    ];
     xkb = {
-      layout = "us";
+      layout = "us,ru";
       variant = "colemak_dh_wide_iso";
       options = "grp:toggle,ctrl:nocaps";
     };
@@ -79,12 +121,19 @@
       enable = false;
       configFile = null;
     };
-    # windowManager.xmonad = {
-    #   enable = true;
-    #   enableContribAndExtras = true;
-    #   enableConfiguredRecompile = true;
-    #   config = builtins.readFile ../modules/wm/xmonad/xmonad.hs;
-    # };
+
+    windowManager.qtile = {
+      enable = true;
+      extraPackages = python3Packages: with python3Packages; [qtile-extras];
+    };
+    windowManager.xmonad = {
+      enable = true;
+      enableContribAndExtras = true;
+      config = null;
+      enableConfiguredRecompile = true;
+      haskellPackages = pkgs.haskell.packages.ghc984;
+      ghcArgs = ["-O2" "-fllvm"];
+    };
   };
 
   # services.postgresql = {
@@ -110,9 +159,9 @@
   services.dbus = {
     implementation = "broker";
   };
-  programs.hyprland.enable = true;
+  programs.hyprland.enable = false;
   programs.sway = {
-    enable = true;
+    enable = false;
     package = pkgs.swayfx;
     wrapperFeatures.gtk = true;
     extraOptions = ["--unsupported-gpu"];
@@ -122,16 +171,6 @@
       swayidle
     ];
   };
-  programs.uwsm = {
-    enable = true;
-    waylandCompositors = {
-      sway = {
-        prettyName = "Sway-UWSM";
-        comment = "Sway compositor managed by UWSM";
-        binPath = "/run/current-system/sw/bin/sway";
-      };
-    };
-  };
 
   services.displayManager.ly = {
     enable = true;
@@ -139,7 +178,7 @@
   services.emacs = {
     enable = true;
     install = true;
-    package = pkgs.emacs-pgtk;
+    package = pkgs.emacsPackages.emacs;
   };
 
   #services.ollama = {
@@ -173,9 +212,79 @@
   users.users.savvy = {
     isNormalUser = true;
     description = "Nixyy";
-    shell = pkgs.nushell;
+    shell = pkgs.elvish;
     extraGroups = ["networkmanager" "wheel"];
-    packages = [];
+    packages = with pkgs; [
+      # Programming languages
+      alejandra
+      bun
+      R
+      rPackages.languageserver
+      odin-git
+      ols-git
+      #bash-env-nushell
+      go
+      nixd
+      nodePackages.vscode-langservers-extracted
+      typescript-language-server
+      biome
+      gopls
+      cmake
+      gnumake
+      clang
+      clang-tools
+      godot-mono
+      tailwindcss-language-server
+      rustup
+      prettierd
+
+      # Editors and text
+      emacs-lsp-booster
+
+      # Window managers and desktop
+      feh
+      rofi
+      picom-pijulius
+      polybarFull
+      polybar-pulseaudio-control
+      vieb
+      wideriver
+      wezterm-git
+      xmobar
+      xdotool
+      trayer
+      waybar
+      telegram-desktop
+      wlogout
+      wpsoffice
+      corefonts
+      vistafonts
+      viber
+      xdg-utils
+      inputs.zen-browser.packages."${system}".default
+      qutebrowser
+      youtube-music
+      wmenu
+
+      # CLI tools
+      pass-wayland
+      mpv
+      yt-dlp
+      btop
+      onefetch
+      fastfetch
+      bat
+      xclip
+      xsel
+      gammastep
+      dust
+      tealdeer
+      fzf
+      fd
+      tmux
+      ripgrep
+      fnm
+    ];
   };
 
   # Allow unfree packages
@@ -188,7 +297,6 @@
     #  wget
     git
     home-manager
-    ion
   ];
 
   # Some programs need SUID wrappers, can be configured further or are

@@ -12,6 +12,22 @@
 in {
   programs.nixvim = {
     enable = true;
+    extraPlugins = [
+      (pkgs.vimUtils.buildVimPlugin
+        {
+          name = "vim-solarized8";
+          src = pkgs.fetchFromGitHub {
+            owner = "lifepillar";
+            repo = "vim-solarized8";
+            tag = "v1.5.1-neovim";
+            sha256 = "sha256-CngMHSYlZnfFwS0mAbNKahVrx9gKaD4MVZjRAsJtO3A=";
+          };
+        })
+    ];
+    extraConfigLua = ''
+      vim.o.background = "dark"
+      vim.cmd.colorscheme "solarized8"
+    '';
     globals.mapleader = " ";
     performance = {
       byteCompileLua = {
@@ -21,16 +37,12 @@ in {
       };
     };
     clipboard.providers.wl-copy = {
-      enable = true;
+      enable = false;
       package = pkgs.wl-clipboard;
     };
     clipboard.providers.xclip = {
       enable = true;
       package = pkgs.xclip;
-    };
-    colorschemes.rose-pine = {
-      enable = true;
-      settings.variant = "main";
     };
     inherit opts;
     inherit plugins;
