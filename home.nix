@@ -2,7 +2,7 @@
   pkgs,
   lib,
   inputs,
-  # kak-tree-sitter-helix,
+  kak-tree-sitter-helix,
   ...
 }: {
   home.username = "savvy";
@@ -10,7 +10,7 @@
   home.stateVersion = "24.05";
   imports = [
     inputs.nixvim.homeManagerModules.nixvim
-    #kak-tree-sitter-helix
+    kak-tree-sitter-helix
     ./modules/util/other.nix
     ./modules/util/gtk.nix
     #./modules/editors/helix.nix
@@ -19,10 +19,11 @@
     #./modules/shell/zsh.nix
   ];
 
-  #programs.kak-tree-sitter-helix.enable = true;
+  programs.kak-tree-sitter-helix.enable = true;
 
   home.packages = with pkgs; [
     nerd-fonts.jetbrains-mono
+    nerd-fonts.monaspace
   ];
 
   programs.gh = {

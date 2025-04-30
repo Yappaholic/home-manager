@@ -1,6 +1,6 @@
 {pkgs, ...}: let
-  terminal = "ghostty";
-  browser = "vieb";
+  terminal = "wezterm";
+  browser = "qutebrowser";
   eclient = "emacsclient -c";
   nvim = "${terminal} -e nvim";
 in {
@@ -33,8 +33,8 @@ in {
     Mod4-Shift-c = "reload";
     Mod4-c = "close";
     Mod4-r = "remove";
-    Mod4-q = "spawn ${terminal}";
-    Mod4-b = "spawn ${browser}";
+    Mod4-Return = "spawn ${terminal}";
+    Mod4-z = "spawn ${browser}";
     Mod4-e = "spawn ${eclient}";
     Mod4-n = "spawn ${nvim}";
     Mod4-p = "spawn rofi -show drun";
@@ -67,7 +67,7 @@ in {
   };
   rules = [
     "focus=on"
-    "floatplacement=smart"
+    "floatplacement=center"
   ];
   settings = {
     focus_follows_mouse = true;

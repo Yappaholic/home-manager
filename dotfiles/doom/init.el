@@ -84,7 +84,7 @@
        :checkers
        syntax              ; tasing you for every semicolon you forget
        ;;(spell +flyspell) ; tasing you for misspelling mispelling
-       ;;grammar           ; tasing grammar mistake every you make
+                                        ;rgrammar           ; tasing grammar mistake every you make
 
        :tools
        ;;ansible
@@ -136,7 +136,7 @@
        ;;gdscript          ; the language you waited for
        (go +lsp +peek)         ; the hipster dialect
        ;;(graphql +lsp)    ; Give queries a REST
-       ;;(haskell +lsp)    ; a language that's lazier than I am
+       (haskell +lsp +tree-sitter)    ; a language that's lazier than I am
        ;;hy                ; readability of scheme w/ speed of python
        ;;idris             ; a language you can depend on
        (json +lsp )              ; At least it ain't XML

@@ -25,13 +25,15 @@ in {
         })
     ];
     extraConfigLua = ''
-      vim.o.background = "dark"
-      vim.cmd.colorscheme "solarized8"
+      vim.o.background = "dark";
+      vim.cmd.colorscheme "solarized8_flat";
     '';
     globals.mapleader = " ";
     performance = {
       byteCompileLua = {
         enable = true;
+        configs = true;
+        initLua = true;
         nvimRuntime = true;
         plugins = true;
       };
@@ -43,6 +45,17 @@ in {
     clipboard.providers.xclip = {
       enable = true;
       package = pkgs.xclip;
+    };
+    colorschemes = {
+      melange.enable = false;
+      kanagawa = {
+        enable = false;
+        settings = {
+          compile = true;
+          terminalColors = true;
+          theme = "wave";
+        };
+      };
     };
     inherit opts;
     inherit plugins;

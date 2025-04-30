@@ -9,12 +9,11 @@ end
 set --export __GLX_VENDOR_LIBRARY_NAME nvidia
 set --export LIBVA_DRIVER_NAME nvidia
 set --export NVD_BACKEND direct
-set --export QT_QPA_PLATFORM wayland
 set --export EDITOR kak
 set --export LSP_USE_PLISTS true
 
 fish_add_path ~/.cargo/bin
-fish_add_path /home/savvy/.bun/bin
+fish_add_path ~/.bun/bin
 fish_add_path ~/go/bin
 
 abbr --add ff fastfetch
@@ -28,4 +27,9 @@ abbr --add gc git commit
 abbr --add gs git status
 abbr --add k kak
 abbr --add z zeditor
-alias vim=nvim
+alias v=nvim
+
+if test $TERM != "linux" && test -z "$ZELLIJ" 
+  zellij
+end
+

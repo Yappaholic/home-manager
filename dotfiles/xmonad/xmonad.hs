@@ -25,7 +25,9 @@ import XMonad.Hooks.ManageHelpers
 import XMonad.Util.NamedScratchpad
 import XMonad.Util.ClickableWorkspaces
 import XMonad.Util.Loggers
+import XMonad.Util.Hacks
 import XMonad.Util.SpawnOnce (spawnOnce)
+import XMonad.Util.SessionStart (doOnce)
 import XMonad.Util.EZConfig (additionalKeysP, removeKeysP, checkKeymap)
 
 myLayout = maximizeWithPadding 0 $ windowNavigation $ subTabbed $ smartSpacingWithEdge 4 (smartBorders(emptyBSP) ||| smartBorders (Tall 1(3/100) (1/2)))
@@ -61,12 +63,14 @@ mySB :: StatusBarConfig
 mySB = statusBarProp "xmobar ~/.config/xmonad/xmobarrc" (clickablePP myPP)
 
 myStartupHook :: X ()
-myStartupHook = do
+myStartupHook = doOnce $ do
+  spawnOnce "emacs --fg-daemon"
   spawnOnce "gammastep -l 56:27 -t 6500:3000"
   spawnOnce "xset r rate 300 30"
   spawnOnce "setxkbmap -layout 'us,ru' -option 'grp:toggle,ctrl:nocaps' -variant 'colemak_dh_wide_iso,'"
   spawnOnce "feh --bg-fill ~/Pictures/solarized.jpg"
   spawnOnce "picom"
+  spawnOnce "trayer --edge top --align right --widthtype request --tint 0x073642FF --transparent true"
 
 myWorkspaces :: [String]
 myWorkspaces = ["1","2","3","4"]
@@ -88,11 +92,12 @@ main = xmonad
         , startupHook = myStartupHook
         , terminal = "wezterm"
         , manageHook = composeOne [isFullscreen -?> doFullFloat]
+        , handleEventHook = handleEventHook def <> trayerPaddingXmobarEventHook
         , focusedBorderColor = "#EBDBB2"
         , normalBorderColor = "#282828"
         }
         `additionalKeysP`
-        [ ("M-<Return>", spawn "wezterm")
+        [ ("M-<Return>", spawn "alacritty")
         , ("M-z", spawn "zen")
         , ("M-e", spawn "emacsclient -c")
         , ("M-p", shellPrompt def)
@@ -122,3 +127,5 @@ main = xmonad
         , ("M-s", dynamicNSPAction "dyn1")
         -- Reload config
         , ("M-S-c", spawn "sh -c 'xmonad --recompile && xmonad --restart'")]
+        `removeKeysP`
+        [("M1-<Return>")]

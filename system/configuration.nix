@@ -9,8 +9,18 @@
   ...
 }: let
   system = "x86_64-linux";
-  #bash-env-nushell = inputs.bash-env-nushell.packages."${system}".default;
-  wezterm-git = inputs.wezterm.packages."${system}".default;
+  # bash-env-nushell = inputs.bash-env-nushell.packages."${system}".default;
+  # wezterm-git = inputs.wezterm.packages."${system}".default;
+  zee-git =
+    pkgs.zee.overrideAttrs
+    (final: prev: {
+      src = pkgs.fetchFromGitHub {
+        owner = "zee-editor";
+        repo = "zee";
+        rev = "613377e79278068316f3c257fa6566688cac6a2a";
+        sha256 = "sha256-r/BpTzAI50da5Upy14mJHaGRQq9j1rgmdbk6BqOU/ck=";
+      };
+    });
   ols-git =
     pkgs.ols.overrideAttrs
     (final: prev: {
@@ -93,12 +103,12 @@ in {
   };
 
   services.flatpak.enable = true;
-  #programs.steam = {
-  #  enable = true;
-  #  remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
-  #  dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
-  #  localNetworkGameTransfers.openFirewall = true;
-  #};
+  programs.steam = {
+    enable = true;
+    remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
+    dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
+    localNetworkGameTransfers.openFirewall = true;
+  };
   console.useXkbConfig = true;
   services.xserver = {
     enable = true;
@@ -106,8 +116,8 @@ in {
     displayManager.session = [
       {
         manage = "window";
-        name = "herbstluftwm";
-        start = ''exec dbus-run-session herbstluftwm'';
+        name = "leftwm";
+        start = ''exec dbus-launch leftwm'';
       }
     ];
     xkb = {
@@ -117,15 +127,6 @@ in {
     };
     videoDrivers = ["nvidia"];
 
-    windowManager.herbstluftwm = {
-      enable = false;
-      configFile = null;
-    };
-
-    windowManager.qtile = {
-      enable = true;
-      extraPackages = python3Packages: with python3Packages; [qtile-extras];
-    };
     windowManager.xmonad = {
       enable = true;
       enableContribAndExtras = true;
@@ -174,6 +175,9 @@ in {
 
   services.displayManager.ly = {
     enable = true;
+    settings = {
+      path = "/run/current-system/sw/bin:/opt/bin";
+    };
   };
   services.emacs = {
     enable = true;
@@ -204,6 +208,7 @@ in {
     enable = false;
     loginShellInit = ''export PATH=/opt/bin:$PATH'';
   };
+  programs.fish.enable = true;
   programs.nh = {
     enable = true;
     flake = "/home/savvy/.config/nixos";
@@ -212,7 +217,7 @@ in {
   users.users.savvy = {
     isNormalUser = true;
     description = "Nixyy";
-    shell = pkgs.elvish;
+    shell = pkgs.fish;
     extraGroups = ["networkmanager" "wheel"];
     packages = with pkgs; [
       # Programming languages
@@ -229,6 +234,8 @@ in {
       typescript-language-server
       biome
       gopls
+      bash-language-server
+      fish-lsp
       cmake
       gnumake
       clang
@@ -240,23 +247,29 @@ in {
 
       # Editors and text
       emacs-lsp-booster
+      ad
+      kakoune
+      kakoune-lsp
+      zee-git
 
       # Window managers and desktop
       feh
+      gammastep
       rofi
       picom-pijulius
       polybarFull
       polybar-pulseaudio-control
-      vieb
-      wideriver
-      wezterm-git
+      alacritty
+      leftwm
+      leftwm-config
+      leftwm-theme
       xmobar
       xdotool
       trayer
       waybar
       telegram-desktop
       wlogout
-      wpsoffice
+      softmaker-office
       corefonts
       vistafonts
       viber
@@ -267,7 +280,10 @@ in {
       wmenu
 
       # CLI tools
+      nix-your-shell
+      gitu
       pass-wayland
+      bc
       mpv
       yt-dlp
       btop
@@ -276,7 +292,6 @@ in {
       bat
       xclip
       xsel
-      gammastep
       dust
       tealdeer
       fzf
@@ -284,6 +299,7 @@ in {
       tmux
       ripgrep
       fnm
+      zellij
     ];
   };
 
@@ -295,6 +311,7 @@ in {
   environment.systemPackages = with pkgs; [
     #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     #  wget
+    vim
     git
     home-manager
   ];

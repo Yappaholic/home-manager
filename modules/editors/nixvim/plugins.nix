@@ -3,8 +3,10 @@
   conform-nvim = import ./conform.nix;
 in {
   inherit lsp;
+  orgmode.enable = true;
   lsp-format.enable = true;
   telescope.enable = true;
+  which-key.enable = true;
   tmux-navigator = {
     enable = true;
     settings.no_mappings = 0;
@@ -67,6 +69,13 @@ in {
               filetype = "blade",
             }
     '';
+    settings = {
+      ensureInstalled = "all";
+      highlight = {
+        enable = true;
+      };
+      indent.enable = true;
+    };
   };
   luasnip.enable = true;
   web-devicons.enable = true;

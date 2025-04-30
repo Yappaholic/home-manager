@@ -24,8 +24,8 @@
 ;;(setq doom-font (font-spec :family "Fira Code" :size 12 :weight 'semi-light)
 ;;      doom-variable-pitch-font (font-spec :family "Fira Sans" :size 13))
 (setq doom-font (font-spec
-                 :family "JetBrainsMono Nerd Font"
-                 :size 18))
+                 :family "JetBrainsMono Nerd Font Mono"
+                 :size 20))
 ;; If you or Emacs can't find your font, use 'M-x describe-font' to look them
 ;; up, `M-x eval-region' to execute elisp code, and 'M-x doom/reload-font' to
 ;; refresh your font settings. If Emacs still can't find your font, it likely
@@ -34,7 +34,10 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-gruvbox)
+(setq doom-theme 'doom-solarized-dark-high-contrast)
+
+;; Posix shell
+(setq shell-file-name (executable-find "elvish"))
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -43,12 +46,15 @@
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/org/")
+(setenv "LSP_USE_PLISTS" "true")
 
 (setq default-frame-alist '((undecorated . t)))
 (scroll-bar-mode -1)
 
 ;; Odin language
 (add-to-list 'auto-mode-alist '("\\.odin\\'" . odin-ts-mode))
+(use-package ron-mode)
+(add-to-list 'auto-mode-alist '("\\.ron\\'" . ron-mode))
 (after! lsp-mode
   (add-to-list 'lsp-language-id-configuration '(odin-ts-mode . "odin"))
 
@@ -58,9 +64,46 @@
                     :server-id 'ols
                     :multi-root t))
 
+  ;; Lsp Booster
+  (defun lsp-booster--advice-json-parse (old-fn &rest args)
+    "Try to parse bytecode instead of json."
+    (or
+     (when (equal (following-char) ?#)
+       (let ((bytecode (read (current-buffer))))
+         (when (byte-code-function-p bytecode)
+           (funcall bytecode))))
+     (apply old-fn args)))
+  (advice-add (if (progn (require 'json)
+                         (fboundp 'json-parse-buffer))
+                  'json-parse-buffer
+                'json-read)
+              :around
+              #'lsp-booster--advice-json-parse)
+
+  (defun lsp-booster--advice-final-command (old-fn cmd &optional test?)
+    "Prepend emacs-lsp-booster command to lsp CMD."
+    (let ((orig-result (funcall old-fn cmd test?)))
+      (if (and (not test?)                             ;; for check lsp-server-present?
+               (not (file-remote-p default-directory)) ;; see lsp-resolve-final-command, it would add extra shell wrapper
+               lsp-use-plists
+               (not (functionp 'json-rpc-connection))  ;; native json-rpc
+               (executable-find "emacs-lsp-booster"))
+          (progn
+            (when-let ((command-from-exec-path (executable-find (car orig-result))))  ;; resolve command from exec-path (in case not found in $PATH)
+              (setcar orig-result command-from-exec-path))
+            (message "Using emacs-lsp-booster for %s!" orig-result)
+            (cons "emacs-lsp-booster" orig-result))
+        orig-result)))
+  (advice-add 'lsp-resolve-final-command :around #'lsp-booster--advice-final-command)
   )
+
 (add-hook 'odin-ts-mode-hook #'lsp!)
 (set-formatter! 'odinfmt '("odinfmt" filepath) :modes '(odin-ts-mode))
+(setq lsp-nix-nixd-formatting-command [ "alejandra" ])
+
+;; Ion mode
+(add-to-list 'auto-mode-alist '("\\.ion'" . ion-mode))
+(add-to-list 'auto-mode-alist '("/ion/initrc'" . ion-mode))
 
 ;; Harpoon config
 (map! :leader "C-SPC" 'harpoon-quick-menu-hydra)
