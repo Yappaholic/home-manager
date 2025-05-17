@@ -35,14 +35,16 @@ require("mason").setup()
 require("mason-lspconfig").setup()
 -- These are just examples. Replace them with the language
 -- servers you have installed in your system
-require('lspconfig').rust_analyzer.setup({})
-require('lspconfig').clangd.setup({})
-require('lspconfig').cssls.setup({})
-require('lspconfig').gopls.setup({})
-require('lspconfig').tailwindcss.setup({})
-require('lspconfig').vtsls.setup({})
-require('lspconfig').cmake.setup({})
-require('lspconfig').r_language_server.setup({})
+vim.lsp.enable('rust_analyzer')
+vim.lsp.enable('clangd')
+vim.lsp.enable('cssls')
+vim.lsp.enable('gopls')
+vim.lsp.enable('tailwindcss')
+vim.lsp.enable('ols')
+vim.lsp.enable('vtsls')
+vim.lsp.enable('cmake')
+vim.lsp.enable('r_language_server')
+
 vim.g.zig_fmt_parse_errors = 0
 require('lspconfig').zls.setup({})
 
@@ -59,7 +61,7 @@ cmp.setup({
     {name = 'buffer'},
   },
   mapping = cmp.mapping.preset.insert({
-    ['<C-y>'] = cmp.mapping.confirm({select = true}),
+    ['<C-o>'] = cmp.mapping.confirm({select = true}),
   }),
   snippet = {
     expand = function(args)

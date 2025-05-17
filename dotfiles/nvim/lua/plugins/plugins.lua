@@ -1,15 +1,21 @@
 return { 
  "theprimeagen/harpoon",
  "rebelot/kanagawa.nvim",
- "theprimeagen/harpoon",
- "tpope/vim-fugitive",
- "alexghergh/nvim-tmux-navigation",
+ "gentoo/gentoo-syntax",
+ {
+  "NeogitOrg/neogit",
+  dependencies = {
+    "nvim-lua/plenary.nvim",         -- required
+    "sindrets/diffview.nvim",        -- optional - Diff integration
+
+    -- Only one of these is needed.
+    "nvim-telescope/telescope.nvim", -- optional
+  },
+},
  "stevearc/conform.nvim",
- "lukas-reineke/indent-blankline.nvim",
  "nvim-lualine/lualine.nvim",
  "R-nvim/R.nvim",
  'nyoom-engineering/oxocarbon.nvim',
- "rebelot/kanagawa.nvim",
  {'nvim-telescope/telescope.nvim', tag = '0.1.8'},
  {"nvim-treesitter/nvim-treesitter", build = ":TSUpdate"},
  -- LSP
