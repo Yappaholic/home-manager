@@ -19,4 +19,11 @@ set-env QT_QPA_PLATFORM wayland
 set-env LSP_USE_PLISTS true
 
 use path
+use readline-binding
 set paths = (conj $paths ~/.local/bin ~/.cargo/bin ~/bin ~/.local/bin/ ~/go/bin /opt/bin ~/.bun/bin)
+set-env CARAPACE_BRIDGES 'zsh,fish,bash' # optional
+eval (carapace _carapace|slurp)
+
+if (eq $E:TERM "xterm-ghostty") {
+  use ghostty-integration
+}

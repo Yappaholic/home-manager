@@ -1,7 +1,66 @@
 return { 
  "theprimeagen/harpoon",
  "rebelot/kanagawa.nvim",
+ "lambdalisue/vim-suda",
  "gentoo/gentoo-syntax",
+ {
+   "folke/which-key.nvim",
+   event = "VeryLazy",
+   opts = {
+     -- your configuration comes here
+     -- or leave it empty to use the default settings
+     -- refer to the configuration section below
+     preset = "helix",
+     win = {
+       width = { min = 4, max = 40},
+       height = { min = 4, max = 15},
+     },
+     layout = {
+       width = {min = 4, max = 30}
+     },
+   },
+   keys = {
+     {
+       "<leader>?",
+       function()
+         require("which-key").show({ global = false })
+       end,
+       desc = "Buffer Local Keymaps (which-key)",
+     },
+   },
+ },
+ {
+   "kak.nvim",
+   url = "https://codeberg.org/mirge/kak.nvim.git",
+   --version = "^6", -- if you don't want breaking changes
+   event = "VeryLazy", -- load after other plugins, to avoid conflicts
+   opts = {
+     -- your configuration here
+   },
+ },
+ {
+  "folke/snacks.nvim",
+  priority = 1000,
+  lazy = false,
+  ---@type snacks.Config
+  opts = {
+    -- your configuration comes here
+    -- or leave it empty to use the default settings
+    -- refer to the configuration section below
+    bigfile = { enabled = false },
+    dashboard = { enabled = true },
+    explorer = { enabled = false },
+    indent = { enabled = false },
+    input = { enabled = true },
+    picker = { enabled = false },
+    notifier = { enabled = true },
+    quickfile = { enabled = true },
+    scope = { enabled = false },
+    scroll = { enabled = false },
+    statuscolumn = { enabled = true },
+    words = { enabled = true },
+  },
+},
  {
   "NeogitOrg/neogit",
   dependencies = {

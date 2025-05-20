@@ -1,4 +1,4 @@
-source "%val{config}/bundle/kak-bundle/rc/kak-bundle.kak"
+source "%val{config}/bundle/plugins/kak-bundle/rc/kak-bundle.kak"
 bundle kakoune-surround https://github.com/h-youhei/kakoune-surround %{}
 
 bundle auto-pairs https://github.com/alexherbo2/auto-pairs.kak %{
@@ -31,7 +31,9 @@ bundle smarttab https://github.com/andreyorst/smarttab.kak %{
 }
 # TreeSitter
 eval %sh{ kak-tree-sitter -dks -vvvv --init $kak_session  }
-colorscheme solarized-dark
+tree-sitter-session-begin
+colorscheme termcolors
+colorscheme kanagawa
 
 hook global BufCreate .*\.templ %{
 	set-option buffer filetype templ
@@ -44,12 +46,24 @@ hook global BufCreate .*/?.+\.yuck %{
 hook global BufCreate .*/?.+\.c3 %{
   set-option buffer filetype c3
 }
+
+hook global BufCreate .*/?.+\.conf %{
+  set-option buffer filetype conf
+}
+
+hook global BufCreate .*/?.+\.odin %{
+  set-option buffer filetype odin
+}
+
+hook global BufCreate .*/hyprland.conf %{
+  set-option buffer filetype hyprlang
+}
 # LSP
 eval %sh{ kak-lsp --kakoune -s $kak_session }
 hook global WinSetOption filetype=(haskell|rust|html|css|go|javascript|typescript|purescript|c|cpp|nix|zig|c3|odin) %{
     lsp-enable-window
 }
-hook global BufSetOption filetype=(rust|go|html|css|typescript|javascript|zig|nix) %{
+hook global BufSetOption filetype=(rust|go|html|css|typescript|javascript|zig|nix|odin) %{
     hook buffer BufWritePre .* lsp-formatting-sync
 }
 hook global BufSetOption filetype=nix %{
@@ -95,6 +109,7 @@ map global user p '!wl-paste<ret>' -docstring "Paste clipboard"
 # Mappings
 map global insert <tab> '<a-;>:try lsp-snippets-select-next-placeholders catch %{ execute-keys -with-hooks <lt>tab> }<ret>' -docstring 'Select next snippet placeholder'
 map global user f ': popup --title open --kak-script %{edit %opt{popup_output}} -- fzf <ret>' -docstring "Fuzzy finder"
+map global user g ': popup --title open -- gitu <ret>' -docstring "Open Gitu"
 map global user d ': lsp-diagnostics<ret>' -docstring 'LSP diagnostics'
 map global user a ': lsp-code-actions<ret>' -docstring 'LSP actions'
 map global user k ': lsp-hover<ret>' -docstring 'LSP info'

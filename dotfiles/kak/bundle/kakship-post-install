@@ -1,0 +1,3 @@
+
+  cargo install --force --path .
+	[ ! -e $kak_config/starship.toml ] && cp starship.toml $kak_config/

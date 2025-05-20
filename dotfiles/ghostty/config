@@ -1,17 +1,22 @@
-theme = Oxocarbon
-shell-integration = fish
+theme = Kanagawa Wave
+shell-integration = elvish
 shell-integration-features = true
-command = fish
+command = elvish
 focus-follows-mouse = true
 window-decoration = false
 confirm-close-surface = false
 background-opacity = 1
+background-blur = true
 window-padding-balance = true
 gtk-titlebar = false
 gtk-tabs-location = bottom
 gtk-wide-tabs = true
 bold-is-bright = true
 link-url = true
+font-size = 16
+font-family = Monaspace Neon Var
+font-family = Symbols Nerd Font Mono
+font-feature = +liga, +calt, -cv61
 
 keybind = alt+n=new_tab
 keybind = alt+j=next_tab
