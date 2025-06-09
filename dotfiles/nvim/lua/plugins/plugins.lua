@@ -30,15 +30,6 @@ return {
    },
  },
  {
-   "kak.nvim",
-   url = "https://codeberg.org/mirge/kak.nvim.git",
-   --version = "^6", -- if you don't want breaking changes
-   event = "VeryLazy", -- load after other plugins, to avoid conflicts
-   opts = {
-     -- your configuration here
-   },
- },
- {
   "folke/snacks.nvim",
   priority = 1000,
   lazy = false,
