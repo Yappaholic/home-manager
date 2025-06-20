@@ -19,7 +19,7 @@
     #./modules/shell/zsh.nix
   ];
 
-  programs.kak-tree-sitter-helix.enable = true;
+  programs.kak-tree-sitter-helix.enable = false;
 
   home.packages = with pkgs; [
     nerd-fonts.jetbrains-mono
@@ -45,6 +45,10 @@
     windowManager = {
       herbstluftwm = import ./modules/wm/herbsluftwm/config.nix {pkgs = pkgs;};
     };
+  };
+  programs.direnv = {
+    enable = true;
+    nix-direnv.enable = true;
   };
   wayland = {
     windowManager = {

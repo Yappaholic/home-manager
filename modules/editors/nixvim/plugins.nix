@@ -4,6 +4,27 @@
 in {
   inherit lsp;
   orgmode.enable = true;
+  neorg = {
+    enable = true;
+    settings = {
+      load = {
+        "core.completion" = {
+          config = {
+            engine = "nvim-cmp";
+          };
+        };
+        "core.concealer" = {
+          config = {
+            icon_preset = "varied";
+          };
+        };
+        "core.defaults" = {
+          __empty = null;
+        };
+      };
+    };
+    telescopeIntegration.enable = true;
+  };
   lsp-format.enable = true;
   telescope.enable = true;
   which-key.enable = true;
@@ -104,7 +125,10 @@ in {
   cmp-buffer.enable = true;
   dashboard.enable = true;
   nvim-autopairs.enable = true;
-  harpoon.enable = true;
+  harpoon = {
+    enable = true;
+    enableTelescope = true;
+  };
   lualine.enable = true;
   nvim-surround.enable = true;
   todo-comments.enable = true;

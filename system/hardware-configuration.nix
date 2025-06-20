@@ -11,22 +11,21 @@
   boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "usb_storage" "usbhid" "sd_mod" "sr_mod" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" ];
-  boot.kernelParams = ["nvidia_drm.modeset=1"];
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/45242e7b-32c9-46ad-b705-5918f20a80d5";
+    { device = "/dev/disk/by-uuid/ed959989-3653-448d-9e3a-6e51bef42ce3";
       fsType = "ext4";
     };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/8E1A-E18C";
+    { device = "/dev/disk/by-uuid/0249-932E";
       fsType = "vfat";
       options = [ "fmask=0022" "dmask=0022" ];
     };
 
   swapDevices =
-    [ { device = "/dev/disk/by-uuid/81425259-0b67-44c5-b435-9239dcddea34"; }
+    [ { device = "/dev/disk/by-uuid/861631a8-6f9b-4ef0-b6c8-38085b20df90"; }
     ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking

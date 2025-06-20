@@ -53,6 +53,7 @@ in {
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.binfmt.emulatedSystems = ["aarch64-linux"];
 
   networking.hostName = "nixos"; # Define your hostname.
   networking.enableIPv6 = false;
@@ -67,6 +68,7 @@ in {
   # Enable networking
   #networking.networkmanager.enable = true;
   networking.dhcpcd.enable = true;
+  documentation.dev.enable = true;
   #nix.settings.substituters = ["https://aseipp-nix-cache.global.ssl.fastly.net"];
   # Wezterm specific
   nix.settings = {
@@ -101,6 +103,7 @@ in {
   programs.river = {
     enable = false;
   };
+  programs.maomaowm.enable = true;
 
   services.flatpak.enable = true;
   programs.steam = {
@@ -182,7 +185,11 @@ in {
   services.emacs = {
     enable = true;
     install = true;
-    package = pkgs.emacsPackages.emacs;
+    package = with pkgs; (
+      (emacsPackagesFor emacs-pgtk).emacsWithPackages (
+        epkgs: [epkgs.vterm]
+      )
+    );
   };
 
   #services.ollama = {
@@ -244,13 +251,19 @@ in {
       tailwindcss-language-server
       rustup
       prettierd
+      clojure
+      clojure-lsp
+      clj-kondo
+      leiningen
+      man-pages
+      man-pages-posix
 
       # Editors and text
       emacs-lsp-booster
       ad
       kakoune
       kakoune-lsp
-      zee-git
+      #zee-git
 
       # Window managers and desktop
       feh
@@ -259,7 +272,7 @@ in {
       picom-pijulius
       polybarFull
       polybar-pulseaudio-control
-      alacritty
+      ghostty
       leftwm
       leftwm-config
       leftwm-theme
@@ -267,6 +280,9 @@ in {
       xdotool
       trayer
       waybar
+      wlsunset
+      wl-clipboard
+      swww
       telegram-desktop
       wlogout
       softmaker-office
@@ -300,6 +316,7 @@ in {
       ripgrep
       fnm
       zellij
+      elvish
     ];
   };
 

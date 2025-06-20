@@ -1,5 +1,5 @@
 {pkgs}: {
-  enable = true;
+  enable = false;
   mouse = true;
   baseIndex = 1;
   prefix = "C-s";

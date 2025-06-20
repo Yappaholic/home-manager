@@ -24,10 +24,6 @@ in {
           };
         })
     ];
-    extraConfigLua = ''
-      vim.o.background = "dark";
-      vim.cmd.colorscheme "solarized8_flat";
-    '';
     globals.mapleader = " ";
     performance = {
       byteCompileLua = {
@@ -49,7 +45,7 @@ in {
     colorschemes = {
       melange.enable = false;
       kanagawa = {
-        enable = false;
+        enable = true;
         settings = {
           compile = true;
           terminalColors = true;

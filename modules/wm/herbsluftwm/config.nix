@@ -4,7 +4,7 @@
   eclient = "emacsclient -c";
   nvim = "${terminal} -e nvim";
 in {
-  enable = true;
+  enable = false;
   extraConfig = ''
     tag_names=( {1..9} )
     tag_keys=( {1..9} 0 )
