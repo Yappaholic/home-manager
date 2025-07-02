@@ -7,8 +7,8 @@
       size = 12;
     };
     theme = {
-      name = "SolArc-Dark";
-      package = pkgs.solarc-gtk-theme;
+      name = "Kanagawa-B-MB";
+      package = pkgs.kanagawa-gtk-theme;
     };
     gtk3.extraConfig = {
       gtk-application-prefer-dark-theme = 1;

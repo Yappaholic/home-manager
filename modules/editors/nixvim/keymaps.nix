@@ -33,8 +33,30 @@
   }
   {
     action = "<cmd>Trouble diagnostics toggle<CR>";
-    key = "<leader>d";
+    key = "<leader>dd";
     options.desc = "Diagnostics";
+  }
+
+  # DAP
+  {
+    action = "<cmd>lua require'dap'.toggle_breakpoint()<CR>";
+    key = "<leader>db";
+    options.desc = "Add breakpoint";
+  }
+  {
+    action = "<cmd>lua require'dap'.continue()<CR>";
+    key = "<leader>dr";
+    options.desc = "Launch debug";
+  }
+  {
+    action = "<cmd>lua require'dap'.step_over()<CR>";
+    key = "<leader>ds";
+    options.desc = "Step over";
+  }
+  {
+    action = "<cmd>lua require'dap'.step_into()<CR>";
+    key = "<leader>di";
+    options.desc = "Step into";
   }
 
   # Telescope

@@ -1,8 +1,34 @@
-{pkgs, ...}: let
+{
+  pkgs,
+  lib,
+  ...
+}: let
   lsp = import ./lsp.nix {pkgs = pkgs;};
+  dap-lldb = import ./dap.nix {pkgs = pkgs;};
   conform-nvim = import ./conform.nix;
 in {
   inherit lsp;
+  dap = {
+    enable = true;
+    luaConfig.post = ''
+      local dap, dapui = require("dap"),require("dapui")
+      dap.listeners.before.attach.dapui_config = function()
+        dapui.open()
+      end
+      dap.listeners.before.launch.dapui_config = function()
+        dapui.open()
+      end
+      dap.listeners.before.event_terminated.dapui_config = function()
+        dapui.close()
+      end
+      dap.listeners.before.event_exited.dapui_config = function()
+        dapui.close()
+      end
+    '';
+  };
+  inherit dap-lldb;
+  dap-ui.enable = true;
+  dap-virtual-text.enable = true;
   orgmode.enable = true;
   neorg = {
     enable = true;
@@ -114,7 +140,7 @@ in {
         cmp.mapping.preset.insert({
           ['<C-b>'] = cmp.mapping.scroll_docs(-4),
           ['<C-f>'] = cmp.mapping.scroll_docs(4),
-          ['<C-y>'] = cmp.mapping.confirm({select = true}),
+          ['<C-o>'] = cmp.mapping.confirm({select = true}),
           ['<C-c>'] = cmp.mapping.abort(),
         })
       '';

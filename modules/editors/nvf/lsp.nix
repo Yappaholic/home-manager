@@ -1,4 +1,5 @@
 {
+  enable = true;
   formatOnSave = true;
   mappings = {
     goToDeclaration = "gD";
@@ -7,6 +8,6 @@
   };
   trouble = {
     enable = true;
-    mappings.documentDiagnostics = "<leader>d";
+    mappings.documentDiagnostics = "<leader>dd";
   };
 }

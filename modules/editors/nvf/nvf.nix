@@ -1,15 +1,20 @@
 {pkgs, ...}: let
-  languages = import ./languages.nix;
+  languages = import ./languages.nix {pkgs = pkgs;};
   lsp = import ./lsp.nix;
+  keymaps = import ./keymaps.nix;
 in {
   programs.nvf = {
     enable = true;
     settings = {
       vim = {
+        inherit keymaps;
+        inherit languages;
+        inherit lsp;
+        package = pkgs.neovim-unwrapped;
         enableLuaLoader = true;
         theme = {
           enable = true;
-          name = "gruvbox";
+          name = "oxocarbon";
           style = "dark";
         };
         options = {
@@ -17,44 +22,54 @@ in {
           shiftwidth = 2;
           tabstop = 2;
         };
-        inherit languages;
-        inherit lsp;
-    statusline.lualine.enable = true;
-    autocomplete.nvim-cmp.enable = true;
-    autopairs.nvim-autopairs.enable = true;
-    dashboard.dashboard-nvim.enable = true;
-    notes.todo-comments.enable = true;
-    snippets.luasnip.enable = true;
-    undoFile.enable = true;
-    visuals.indent-blankline.enable = true;
-    visuals.nvim-web-devicons.enable = true;
-    ui = {
-      noice.enable = true;
-      smartcolumn = {
-        enable = true;
-        setupOpts.colorcolumn = "80";
-      };
-    };
-    extraPlugins = with pkgs.vimPlugins; {
-      harpoon = {
-        package = harpoon;
-        setup = ''          require('harpoon').setup{
-			  harpoon:setup()
-
-			  vim.keymap.set("n", "<leader>a", function() harpoon:list():add() end)
-			  vim.keymap.set("n", "<C-e>", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end)
-
-			  vim.keymap.set("n", "<C-h>", function() harpoon:list():select(1) end)
-			  vim.keymap.set("n", "<C-t>", function() harpoon:list():select(2) end)
-			  vim.keymap.set("n", "<C-n>", function() harpoon:list():select(3) end)
-			  vim.keymap.set("n", "<C-s>", function() harpoon:list():select(4) end)
-
-			  -- Toggle previous & next buffers stored within Harpoon list
-			  vim.keymap.set("n", "<C-S-P>", function() harpoon:list():prev() end)
-			  vim.keymap.set("n", "<C-S-N>", function() harpoon:list():next() end)}'';
+        statusline.lualine.enable = true;
+        autocomplete.nvim-cmp = {
+          enable = true;
+          mappings = {
+            confirm = "<C-o>";
+            close = "<C-c>";
+            next = "<C-n>";
+            previous = "<C-p>";
+          };
+        };
+        autopairs.nvim-autopairs.enable = true;
+        dashboard.dashboard-nvim.enable = true;
+        notes.todo-comments.enable = true;
+        snippets.luasnip.enable = true;
+        binds.whichKey = {
+          enable = true;
+        };
+        debugger = {
+          nvim-dap = {
+            enable = true;
+            ui = {
+              enable = true;
+              autoStart = true;
+            };
+          };
+        };
+        undoFile.enable = true;
+        visuals.nvim-web-devicons.enable = true;
+        ui = {
+          noice.enable = true;
+          smartcolumn = {
+            enable = true;
+            setupOpts.colorcolumn = "80";
+          };
+        };
+        utility.oil-nvim.enable = true;
+        navigation.harpoon = {
+          enable = true;
+          mappings = {
+            file1 = "<M>1";
+            file2 = "<M>2";
+            file3 = "<M>3";
+            file4 = "<M>4";
+            listMarks = "<C-e>";
+            markFile = "<leader>a";
+          };
+        };
       };
     };
   };
-    };
-      };
 }

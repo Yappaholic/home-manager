@@ -39,7 +39,7 @@ in {
       package = pkgs.wl-clipboard;
     };
     clipboard.providers.xclip = {
-      enable = true;
+      enable = false;
       package = pkgs.xclip;
     };
     colorschemes = {

@@ -2,25 +2,26 @@
   pkgs,
   lib,
   inputs,
-  kak-tree-sitter-helix,
   ...
-}: {
+}: let
+  system = "x86_64-linux";
+in {
   home.username = "savvy";
   home.homeDirectory = "/home/savvy";
   home.stateVersion = "24.05";
   imports = [
-    inputs.nixvim.homeManagerModules.nixvim
-    kak-tree-sitter-helix
+    #inputs.nixvim.homeManagerModules.nixvim
+    #./modules/editors/nixvim/nixvim.nix
+    inputs.nvf.homeManagerModules.default
+    ./modules/editors/nvf/nvf.nix
+    inputs.kak-tree-sitter-helix.homeManagerModules."${system}".kak-tree-sitter-helix
     ./modules/util/other.nix
     ./modules/util/gtk.nix
     #./modules/editors/helix.nix
-    ./modules/editors/nixvim/nixvim.nix
     #./modules/shell/nushell.nix
     #./modules/shell/zsh.nix
   ];
-
-  programs.kak-tree-sitter-helix.enable = false;
-
+  programs.kak-tree-sitter-helix.enable = true;
   home.packages = with pkgs; [
     nerd-fonts.jetbrains-mono
     nerd-fonts.monaspace
@@ -53,7 +54,8 @@
   wayland = {
     windowManager = {
       hyprland = {
-        enable = false;
+        enable = true;
+        plugins = with pkgs.hyprlandPlugins; [hy3];
         settings = import ./modules/wm/hyprland/config.nix;
         systemd.enable = true;
       };

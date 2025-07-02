@@ -2,27 +2,30 @@
   description = "Nixos config flake";
 
   inputs = {
-    nixpkgs.url = "https://flakehub.com/f/NixOS/nixpkgs/0.1";
-    wezterm.url = "github:wezterm/wezterm?dir=nix";
+    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    zen-browser.url = "github:0xc000022070/zen-browser-flake";
     ghostty.url = "github:ghostty-org/ghostty";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/*";
-    zen-browser.url = "github:0xc000022070/zen-browser-flake";
-    bash-env-nushell.url = "github:tesujimath/bash-env-nushell";
+    kak-tree-sitter-helix = {
+      url = "github:igor-ramazanov/kak-tree-sitter-helix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nixvim.url = "github:nix-community/nixvim";
+    nvf = {
+      url = "github:notashelf/nvf";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     maomao.url = "github:DreamMaoMao/maomaowm";
-    kak-tree-sitter-helix.url = "github:igor-ramazanov/kak-tree-sitter-helix";
   };
 
   outputs = {
     nixpkgs,
     home-manager,
-    kak-tree-sitter-helix,
     maomao,
-    determinate,
+    kak-tree-sitter-helix,
     ...
   } @ inputs: let
     system = "x86_64-linux";
@@ -34,14 +37,12 @@
       modules = [
         ./system/configuration.nix
         maomao.nixosModules.maomaowm
-        determinate.nixosModules.default
         home-manager.nixosModules.home-manager
         {
           home-manager.useUserPackages = true;
           home-manager.users.savvy = import ./home.nix;
           home-manager.extraSpecialArgs = {
             inherit inputs;
-            inherit (kak-tree-sitter-helix.homeManagerModules."${system}") kak-tree-sitter-helix;
           };
         }
       ];

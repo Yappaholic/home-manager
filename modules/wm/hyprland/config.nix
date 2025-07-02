@@ -1,7 +1,7 @@
 {
   "$mainMod" = "SUPER";
-  "$terminal" = "kitty";
-  "$browser" = "/opt/bin/nyxt-electron";
+  "$terminal" = "ghostty";
+  "$browser" = "zen";
   "$menu" = "wmenu-run";
   "$logout" = "wlogout";
 
@@ -13,7 +13,8 @@
   ];
 
   exec-once = [
-    "hyprpaper"
+    "swww-daemon"
+    "swww img ~/Pictures/wallpaper.jpg"
     "waybar"
   ];
   general = {
@@ -111,16 +112,15 @@
 
   # Example binds, see https://wiki.hyprland.org/Configuring/Binds/ for more
   bind = [
-    "$mainMod, Q, exec, $terminal"
-    "$mainMod, B, exec, $browser"
+    "$mainMod, Return, exec, $terminal"
+    "$mainMod, Q, exec, $browser"
     "$mainMod, C, killactive,"
-    "$mainMod SHIFT, W, exec, pkill waybar"
     "$mainMod SHIFT, E, exit,"
     "$mainMod, E, exec, emacsclient -c"
     "$mainMod, M, exec, $logout"
     "$mainMod, F, fullscreen, 1"
     "$mainMod, Space, togglefloating,"
-    "$mainMod, R, exec, $menu"
+    "$mainMod, P, exec, $menu"
 
     "$mainMod, h, movefocus, l"
     "$mainMod, l, movefocus, r"

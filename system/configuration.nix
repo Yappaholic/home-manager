@@ -9,18 +9,7 @@
   ...
 }: let
   system = "x86_64-linux";
-  # bash-env-nushell = inputs.bash-env-nushell.packages."${system}".default;
-  # wezterm-git = inputs.wezterm.packages."${system}".default;
-  zee-git =
-    pkgs.zee.overrideAttrs
-    (final: prev: {
-      src = pkgs.fetchFromGitHub {
-        owner = "zee-editor";
-        repo = "zee";
-        rev = "613377e79278068316f3c257fa6566688cac6a2a";
-        sha256 = "sha256-r/BpTzAI50da5Upy14mJHaGRQq9j1rgmdbk6BqOU/ck=";
-      };
-    });
+  zen-browser = inputs.zen-browser.packages."${system}".default;
   ols-git =
     pkgs.ols.overrideAttrs
     (final: prev: {
@@ -66,17 +55,12 @@ in {
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   # Enable networking
-  #networking.networkmanager.enable = true;
-  networking.dhcpcd.enable = true;
+  networking.networkmanager.enable = true;
+  #networking.dhcpcd.enable = true;
   documentation.dev.enable = true;
-  #nix.settings.substituters = ["https://aseipp-nix-cache.global.ssl.fastly.net"];
-  # Wezterm specific
+
   nix.settings = {
     experimental-features = ["nix-command" "flakes"];
-
-    substituters = lib.mkBefore ["https://wezterm.cachix.org"];
-    trusted-public-keys = lib.mkBefore ["wezterm.cachix.org-1:kAbhjYUC9qvblTE+s7S+kl5XM1zVa4skO+E/1IDWdH0="];
-    trusted-users = ["@wheel" "root"];
   };
 
   # Set your time zone.
@@ -131,7 +115,7 @@ in {
     videoDrivers = ["nvidia"];
 
     windowManager.xmonad = {
-      enable = true;
+      enable = false;
       enableContribAndExtras = true;
       config = null;
       enableConfiguredRecompile = true;
@@ -159,11 +143,10 @@ in {
     enable = true;
     extraPackages = with pkgs; [libvdpau-va-gl];
   };
-  # programs.hyprland.enable = true;
   services.dbus = {
     implementation = "broker";
   };
-  programs.hyprland.enable = false;
+  programs.hyprland.enable = true;
   programs.sway = {
     enable = false;
     package = pkgs.swayfx;
@@ -244,10 +227,11 @@ in {
       bash-language-server
       fish-lsp
       cmake
+      meson
       gnumake
       clang
       clang-tools
-      godot-mono
+      #godot-mono
       tailwindcss-language-server
       rustup
       prettierd
@@ -260,38 +244,35 @@ in {
 
       # Editors and text
       emacs-lsp-booster
-      ad
-      kakoune
+      kakoune-unwrapped
       kakoune-lsp
-      #zee-git
 
       # Window managers and desktop
       feh
       gammastep
-      rofi
-      picom-pijulius
-      polybarFull
-      polybar-pulseaudio-control
+      #rofi
+      #picom-pijulius
+      #polybarFull
+      #polybar-pulseaudio-control
       ghostty
-      leftwm
-      leftwm-config
-      leftwm-theme
-      xmobar
-      xdotool
-      trayer
+      #leftwm
+      #leftwm-config
+      #leftwm-theme
+      #xmobar
+      #xdotool
+      #trayer
       waybar
       wlsunset
       wl-clipboard
       swww
       telegram-desktop
       wlogout
-      softmaker-office
+      #softmaker-office
       corefonts
       vistafonts
       viber
       xdg-utils
-      inputs.zen-browser.packages."${system}".default
-      qutebrowser
+      zen-browser
       youtube-music
       wmenu
 
