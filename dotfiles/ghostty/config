@@ -1,7 +1,6 @@
 theme = Kanagawa Wave
-shell-integration = elvish
+shell-integration = fish
 shell-integration-features = true
-command = elvish
 focus-follows-mouse = true
 window-decoration = false
 confirm-close-surface = false

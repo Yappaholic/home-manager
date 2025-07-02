@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 swww-daemon &
 swww img ~/Pictures/wallpaper.png
