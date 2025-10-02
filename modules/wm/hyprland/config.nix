@@ -113,14 +113,13 @@
   # Example binds, see https://wiki.hyprland.org/Configuring/Binds/ for more
   bind = [
     "$mainMod, Return, exec, $terminal"
-    "$mainMod, Q, exec, $browser"
-    "$mainMod, C, killactive,"
+    "$mainMod, Q, killactive,"
     "$mainMod SHIFT, E, exit,"
     "$mainMod, E, exec, emacsclient -c"
     "$mainMod, M, exec, $logout"
     "$mainMod, F, fullscreen, 1"
-    "$mainMod, Space, togglefloating,"
-    "$mainMod, P, exec, $menu"
+    "$mainMod, P, togglefloating,"
+    "$mainMod, Space, exec, $menu"
 
     "$mainMod, h, movefocus, l"
     "$mainMod, l, movefocus, r"

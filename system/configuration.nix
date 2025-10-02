@@ -43,6 +43,8 @@ in {
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.binfmt.emulatedSystems = ["aarch64-linux"];
+  boot.kernelPackages = pkgs.linuxPackages_cachyos-gcc;
+  zramSwap.enable = true;
 
   networking.hostName = "nixos"; # Define your hostname.
   networking.enableIPv6 = false;
@@ -77,21 +79,28 @@ in {
       xdg-desktop-portal-gtk
     ];
   };
-  #programs.xwayland = {
-  #  enable = true;
-  #  package = pkgs.xwayland-satellite;
-  #};
-  #programs.niri = {
-  #  enable = true;
-  #};
-  programs.river = {
-    enable = false;
+  programs.xwayland = {
+    enable = true;
+    package = pkgs.xwayland-satellite;
   };
-  programs.maomaowm.enable = true;
-
+  programs.niri = {
+    enable = true;
+    package = pkgs.niri_git;
+  };
   services.flatpak.enable = true;
+  services.guix = {
+    enable = true;
+    substituters.urls = [
+      "https://bordeaux.guix.gnu.org"
+      "https://mirror.yandex.ru/mirrors/guix/"
+    ];
+  };
   programs.steam = {
     enable = true;
+    extraCompatPackages = with pkgs; [
+      proton-cachyos_x86_64_v3
+      proton-ge-custom
+    ];
     remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
     dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
     localNetworkGameTransfers.openFirewall = true;
@@ -113,7 +122,14 @@ in {
       options = "grp:toggle,ctrl:nocaps";
     };
     videoDrivers = ["nvidia"];
-
+    windowManager.qtile = {
+      enable = true;
+      package = inputs.qtile.packages.${system}.default;
+      extraPackages = python3Packages:
+        with python3Packages; [
+          qtile-extras
+        ];
+    };
     windowManager.xmonad = {
       enable = false;
       enableContribAndExtras = true;
@@ -174,6 +190,7 @@ in {
       )
     );
   };
+  programs.java.enable = true;
 
   #services.ollama = {
   #  enable = true;
@@ -212,33 +229,12 @@ in {
     packages = with pkgs; [
       # Programming languages
       alejandra
-      bun
-      R
-      rPackages.languageserver
-      odin-git
-      ols-git
       #bash-env-nushell
-      go
       nixd
-      nodePackages.vscode-langservers-extracted
-      typescript-language-server
-      biome
-      gopls
-      bash-language-server
-      fish-lsp
-      cmake
-      meson
-      gnumake
       clang
+      rustup
       clang-tools
       #godot-mono
-      tailwindcss-language-server
-      rustup
-      prettierd
-      clojure
-      clojure-lsp
-      clj-kondo
-      leiningen
       man-pages
       man-pages-posix
 
@@ -294,10 +290,8 @@ in {
       fzf
       fd
       tmux
+      jq
       ripgrep
-      fnm
-      zellij
-      elvish
     ];
   };
 

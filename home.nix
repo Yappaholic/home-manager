@@ -10,21 +10,16 @@ in {
   home.homeDirectory = "/home/savvy";
   home.stateVersion = "24.05";
   imports = [
-    #inputs.nixvim.homeManagerModules.nixvim
-    #./modules/editors/nixvim/nixvim.nix
-    inputs.nvf.homeManagerModules.default
-    ./modules/editors/nvf/nvf.nix
-    inputs.kak-tree-sitter-helix.homeManagerModules."${system}".kak-tree-sitter-helix
+    ./modules/editors/helix.nix
     ./modules/util/other.nix
     ./modules/util/gtk.nix
-    #./modules/editors/helix.nix
     #./modules/shell/nushell.nix
     #./modules/shell/zsh.nix
   ];
-  programs.kak-tree-sitter-helix.enable = true;
   home.packages = with pkgs; [
     nerd-fonts.jetbrains-mono
     nerd-fonts.monaspace
+    maple-mono.NF
   ];
 
   programs.gh = {
@@ -33,13 +28,24 @@ in {
       git_protocol = "ssh";
     };
   };
-  services.hyprpaper = {
-    enable = false;
-    settings = {
-      ipc = "on";
-      splash = false;
-      preload = ["~/Pictures/wallpaper.jpg"];
-      wallpaper = ["DVI-I-1,~/Pictures/wallpaper.jpg"];
+  services = {
+    wlsunset = {
+      enable = true;
+      sunrise = "06:30";
+      sunset = "21:30";
+      temperature = {
+        day = 6500;
+        night = 2500;
+      };
+    };
+    hyprpaper = {
+      enable = false;
+      settings = {
+        ipc = "on";
+        splash = false;
+        preload = ["~/Pictures/wallpaper.jpg"];
+        wallpaper = ["DVI-I-1,~/Pictures/wallpaper.jpg"];
+      };
     };
   };
   xsession = {
@@ -72,6 +78,44 @@ in {
         '';
       };
     };
+  };
+  programs.fish = {
+    enable = true;
+    plugins = with pkgs.fishPlugins; [
+      {
+        name = "hydro";
+        src = hydro.src;
+      }
+      {
+        name = "sponge";
+        src = sponge.src;
+      }
+      {
+        name = "fzf-fish";
+        src = fzf-fish.src;
+      }
+      {
+        name = "fishbang";
+        src = fishbang.src;
+      }
+      {
+        name = "done";
+        src = done.src;
+      }
+    ];
+    shellAbbrs = {
+      nhs = "nh os switch";
+      nht = "nh os test";
+      ls = "eza --color=always --icons=always";
+      la = "eza -la --color=always --icons=always";
+      k = "kak";
+      v = "nvim";
+    };
+    shellInitLast = ''
+      fish_add_path "~/.cargo/bin"
+      fish_add_path "~/go/bin"
+      fish_add_path "~/.config/emacs/bin"
+    '';
   };
 
   programs.tmux = import ./modules/shell/tmux.nix {pkgs = pkgs;};

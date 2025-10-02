@@ -3,29 +3,23 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
     zen-browser.url = "github:0xc000022070/zen-browser-flake";
-    ghostty.url = "github:ghostty-org/ghostty";
+    qtile = {
+      url = "github:qtile/qtile/wayc";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    kak-tree-sitter-helix = {
-      url = "github:igor-ramazanov/kak-tree-sitter-helix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    nixvim.url = "github:nix-community/nixvim";
-    nvf = {
-      url = "github:notashelf/nvf";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    maomao.url = "github:DreamMaoMao/maomaowm";
   };
 
   outputs = {
     nixpkgs,
     home-manager,
-    maomao,
-    kak-tree-sitter-helix,
+    chaotic,
     ...
   } @ inputs: let
     system = "x86_64-linux";
@@ -36,8 +30,8 @@
       specialArgs = {inherit inputs;};
       modules = [
         ./system/configuration.nix
-        maomao.nixosModules.maomaowm
         home-manager.nixosModules.home-manager
+        chaotic.nixosModules.default
         {
           home-manager.useUserPackages = true;
           home-manager.users.savvy = import ./home.nix;
